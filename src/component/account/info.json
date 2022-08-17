@@ -1,0 +1,16 @@
+{
+  "info": {
+    "user": "admin",
+    "pass": "Server123!",
+    "avatar": "/static/images/avatars/avatar_6.png",
+    "city": "Hà Nội",
+    "country": "Việt Nam",
+    "name": "Demo KC 4.0",
+    "timezone": "GTM+7",
+    "firstName": "Demo KC",
+    "lastName": "4.0",
+    "email": "demokc4.0@gmail.com",
+    "phone": "",
+    "state": "Hà Nội"
+  }
+}

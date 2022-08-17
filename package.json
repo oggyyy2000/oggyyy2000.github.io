@@ -1,0 +1,88 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/lab": "^4.0.0-alpha.60",
+    "@popperjs/core": "^2.6.0",
+    "@reactionaries/hookd": "0.0.27",
+    "@reactionaries/hookd-cli": "0.0.27",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.21.1",
+    "chart.js": "^2.9.4",
+    "googleapis": "^73.0.0",
+    "history": "^5.0.0",
+    "jquery": "^3.6.0",
+    "moment": "^2.29.1",
+    "pannellum-react": "^1.2.4",
+    "react": "^16.3.1",
+    "react-360-view": "^0.1.3",
+    "react-bounding-box": "^0.5.21",
+    "react-chartjs-2": "^2.11.2",
+    "react-dom": "^16.3.1",
+    "react-geocode": "^0.2.3",
+    "react-google-autocomplete": "^1.3.0",
+    "react-google-maps": "^9.4.5",
+    "react-helmet": "^6.1.0",
+    "react-icons": "^4.3.1",
+    "react-iframe": "^1.8.0",
+    "react-image-magnifiers": "^1.4.0",
+    "react-inner-image-zoom": "^2.0.2",
+    "react-intense": "^0.1.8",
+    "react-panelgroup": "^1.0.12",
+    "react-picture-annotation": "^1.2.0",
+    "react-player": "^2.9.0",
+    "react-redux": "^7.2.4",
+    "react-resize-layout": "^0.2.3",
+    "react-router": "^6.0.0-beta.0",
+    "react-router-dom": "^6.0.0-beta.0",
+    "react-scripts": "4.0.1",
+    "react-shape-editor": "^4.1.1",
+    "react-slick": "^0.29.0",
+    "react-swipeable-views": "^0.13.9",
+    "react-to-print": "^2.13.0",
+    "react-use-websocket": "^2.9.1",
+    "react-websocket": "^2.1.0",
+    "react-zoom-pan-pinch": "^1.6.1",
+    "redux": "^4.1.0",
+    "redux-saga": "^1.1.3",
+    "three": "^0.140.0",
+    "uuid": "^8.3.2",
+    "web-vitals": "^0.2.4",
+    "websocket": "^1.0.34"
+  },
+  "scripts": {
+    "start": "set PORT=3000 && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@material-ui/data-grid": "^4.0.0-alpha.35",
+    "@material-ui/icons": "^4.11.2",
+    "form-data": "^4.0.0",
+    "prop-types": "^15.7.2",
+    "react-perfect-scrollbar": "^1.5.8"
+  }
+}

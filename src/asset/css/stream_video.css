@@ -1,0 +1,45 @@
+.outer {
+
+    height: 100%;
+    width: 100%;
+    background-color: darkgray;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    /*align-items: center;*/
+}
+
+.center_child_abso{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+
+.video-container {
+    /*background-color: black;*/
+    /*overflow: hidden;*/
+    position: relative;
+    height: 100%;
+    width: 100%;
+    transform: 'translateY(0)',    
+    /*overflow: auto;*/
+    /*background-color: red;*/
+}
+.video-class{
+    height: 100%;
+    width: 100%;
+}
+
+.center_child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progressbar_container{
+    width: 100%;
+}

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Power Transmission Line
+* source:	https://sketchfab.com/3d-models/power-transmission-line-d72a69945cee44d8bc3b736e236c26e9
+* author:	combine_soldier (https://sketchfab.com/combine_soldier)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Power Transmission Line" (https://sketchfab.com/3d-models/power-transmission-line-d72a69945cee44d8bc3b736e236c26e9) by combine_soldier (https://sketchfab.com/combine_soldier) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
