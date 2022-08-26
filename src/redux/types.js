@@ -23,3 +23,7 @@ export const CURRENT_VIDEO_IMAGE = "CURRENT_VIDEO_IMAGE";
 export const SlideVideoShow = "SlideVideoShow";
 export const sizeResize = "sizeResize";
 export const pageSize = "pageSize";
+export const anhthietbiloi = "anhthietbiloi";
+export const idtuyen = "idtuyen";
+export const idthietbi = "idthietbi";
+export const idanh = "idanh";

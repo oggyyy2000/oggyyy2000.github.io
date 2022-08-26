@@ -5,7 +5,7 @@ export const dataReducer = (state, action) => {
   } = action;
 
   switch (type) {
-    case "SET_DATA":
+    case "SET_DATA": 
       return {
         ...state,
         name,

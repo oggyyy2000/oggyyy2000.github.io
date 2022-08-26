@@ -1,4 +1,4 @@
-import { Typography, Card, CardContent, CardHeader } from "@material-ui/core";
+import { Typography, Card, CardContent } from "@material-ui/core";
 
 // icon thiet bi loi
 import errorinsuTT from "./icon/error_insuTT.png";
@@ -13,10 +13,27 @@ import noterrorinsuTT from "./icon/not_error_insuTT.png";
 import noterrorinsuSLC from "./icon/not_error_insuSLC.png";
 import noterrorDZ from "./icon/not_error_DZ.png";
 
-import DataFetching from "./DataFetching";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../redux/types";
 
 const MucDoLoi = () => {
   const classes = {};
+  const anhthietbiloi = useSelector((state) => state.anhthietbiloi);
+  const idtuyen = useSelector((state) => state.idtuyen);
+  const idthietbi = useSelector((state) => state.idthietbi);
+  const dispatch = useDispatch();
+  const idanh = useSelector((state) => state.idanh);
+
+  function HandleClickDiv(event, value, loai) {
+    let obj = {};
+    obj.loai = loai;
+    obj.mathietbi = value.ma_thiet_bi;
+    dispatch({
+      type: actions.idanh,
+      data: obj,
+    });
+  }
+
   return (
     <Card
       className={classes.root}
@@ -27,6 +44,7 @@ const MucDoLoi = () => {
         <Typography variant="h5" component="h2">
           Cach dien thuy tinh:
         </Typography>
+
         <div
           style={{
             display: "flex",
@@ -35,110 +53,34 @@ const MucDoLoi = () => {
             marginTop: "2%",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={noterrorinsuTT} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={warninsuTT} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuTT} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuTT} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={noterrorinsuTT} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={warninsuTT} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuTT} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuTT} height={75} width={40} />
-          </div>
+          {anhthietbiloi[idtuyen]?.[idthietbi]?.cdtt?.map((value, index) => (
+            <>
+              <div
+                onClick={(e) => HandleClickDiv(e, value, "cdtt")}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginLeft: "7%",
+                  border: "1px solid black",
+                  borderRadius: "13px",
+                  overflow: "hidden",
+                  minWidth: "7%",
+                }}
+              >
+                <img
+                  src={
+                    value.mucdoondinh >= 70
+                      ? noterrorinsuTT
+                      : value.mucdoondinh >= 50
+                      ? warninsuTT
+                      : errorinsuTT
+                  }
+                  height={75}
+                  width={40}
+                />
+              </div>
+            </>
+          ))}
         </div>
 
         {/* #-------------------------------------------------------- */}
@@ -153,110 +95,35 @@ const MucDoLoi = () => {
             overflow: "auto",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuSLC} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuSLC} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={noterrorinsuSLC} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuSLC} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={warninsuSLC} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={errorinsuSLC} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={noterrorinsuSLC} height={75} width={40} />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "7%",
-            }}
-          >
-            <img src={warninsuSLC} height={75} width={40} />
-          </div>
+          {anhthietbiloi[idtuyen]?.[idthietbi]?.cdslc?.map((value, index) => (
+            <>
+              <div
+                onClick={(e) => HandleClickDiv(e, value, "cdslc")}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: "7%",
+                  border: "1px solid black",
+                  borderRadius: "13px",
+                  overflow: "hidden",
+                  minWidth: "6%",
+                }}
+              >
+                <img
+                  src={
+                    value.mucdoondinh >= 70
+                      ? noterrorinsuSLC
+                      : value.mucdoondinh >= 50
+                      ? warninsuSLC
+                      : errorinsuSLC
+                  }
+                  height={75}
+                  width={40}
+                />
+              </div>
+            </>
+          ))}
         </div>
 
         {/* #-------------------------------------------------------- */}
@@ -271,177 +138,36 @@ const MucDoLoi = () => {
             overflow: "auto",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={errorDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={errorDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={noterrorDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={errorDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={errorDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={warnDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={noterrorDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={errorDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginLeft: "7%",
-              border: "1px solid black",
-              borderRadius: "13px",
-              overflow: "hidden",
-              minWidth: "10%",
-              minHeight: "10%",
-            }}
-          >
-            <img
-              src={warnDZ}
-              height={35}
-              width={60}
-              style={{ marginTop: "9%", marginBottom: "9%" }}
-            />
-          </div>
+          {anhthietbiloi[idtuyen]?.[idthietbi]?.dday?.map((value, index) => (
+            <>
+              <div
+                onClick={(e) => HandleClickDiv(e, value, "dday")}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: "7%",
+                  border: "1px solid black",
+                  borderRadius: "13px",
+                  overflow: "hidden",
+                  height: "45px",
+                  width: "115px",
+                }}
+              >
+                <img
+                  src={
+                    value.mucdoondinh >= 70
+                      ? noterrorDZ
+                      : value.mucdoondinh >= 50
+                      ? warnDZ
+                      : errorDZ
+                  }
+                  height={35}
+                  width={100}
+                />
+              </div>
+            </>
+          ))}
         </div>
       </CardContent>
     </Card>
@@ -449,28 +175,3 @@ const MucDoLoi = () => {
 };
 
 export { MucDoLoi };
-
-const ThongTinTBLoi = () => {
-  return (
-    <Card variant="outlined" style={{ height: "389px", overflow: "auto" }}>
-      <CardContent>
-        <CardHeader title="THÔNG TIN THIẾT BỊ" />
-        <DataFetching />
-      </CardContent>
-    </Card>
-  );
-};
-
-export { ThongTinTBLoi };
-
-const AnhTBLoi = () => {
-  return (
-    <Card variant="outlined" style={{ height: "100%" }}>
-      <CardContent>
-        <CardHeader title={"Ảnh thiết bị lỗi"} />
-      </CardContent>
-    </Card>
-  );
-};
-
-export { AnhTBLoi };

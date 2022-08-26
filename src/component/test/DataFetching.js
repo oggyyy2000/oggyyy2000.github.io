@@ -23,22 +23,21 @@ import Loading from "./Loading";
 import { MucDoLoi } from "./List";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-import anhcdttgoc from "./icon/Data_test_vobat_divat/DJI_0627_379.jpg";
-import anhcdttloi1 from "./icon/Data_test_vobat_divat/DJI_0627_443.jpg";
-import anhcdttloi2 from "./icon/Data_test_vobat_divat/DJI_0627_385.jpg";
-import anhcdttloi3 from "./icon/Data_test_vobat_divat/DJI_0627_382.jpg";
-
-import anhdzgoc from "./icon/Data_test_vobat_divat/DJI_0635_89.jpg";
-import anhdzloi1 from "./icon/Data_test_vobat_divat/DJI_0635_88.jpg";
-import anhdzloi2 from "./icon/Data_test_vobat_divat/DJI_0635_92.jpg";
-import anhdzloi3 from "./icon/Data_test_vobat_divat/DJI_0635_93.jpg";
-import { Transform } from "form-data";
+import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../redux/types";
+import datathietbiloi from "./datathietbiloi_T1";
 
 function DataFetching() {
   const [Filter, setFilter] = useState([]);
   const [ListTuyen, setListTuyen] = useState([]);
   const [ListThietbi, setListThietBi] = useState({});
-  const [Tuyen, setTuyen] = useState({});
+  const [Tuyen, setTuyen] = useState("");
+  const dispatch = useDispatch();
+  const anhthietbiloi = useSelector((state) => state.anhthietbiloi);
+  const idtuyen = useSelector((state) => state.idtuyen);
+  const idanh = useSelector((state) => state.idanh);
+  const idthietbi = useSelector((state) => state.idthietbi);
+  const [dEtail, setdEtail] = useState({});
 
   const handleChangetb = (event) => {
     setListThietBi(event.target.value);
@@ -50,14 +49,36 @@ function DataFetching() {
 
   useEffect(() => {
     axios
-      .get(
-        `http://10.0.17.28:8000/tuyens/`
-
-        // `http://10.0.17.28:8000/thietbituyensfilter/tuyen_loai/T6&c%C3%A1ch%20%C4%91i%E1%BB%87n%20th%E1%BB%A7y%20tinh/`
-      )
+      .get(`http://10.0.17.28:8000/tuyens/`)
       .then((res) => {
-        console.log(res);
-        setListTuyen(res.data);
+        setListTuyen(res.data.slice(0, 3));
+        datathietbiloi["ALL"] = {};
+
+        console.log(datathietbiloi);
+        let keys = Object.keys(datathietbiloi);
+        for (let i = 0; i < keys.length; i++) {
+          datathietbiloi["ALL"] = {
+            ...datathietbiloi["ALL"],
+            ...datathietbiloi[keys[i]],
+          };
+        }
+        console.log(datathietbiloi);
+        dispatch({ type: actions.anhthietbiloi, data: datathietbiloi });
+        // dispatch({
+        //   type: actions.idtuyen,
+        //   data: Object.keys(datathietbiloi)[0],
+        // });
+        if (Tuyen === "")
+          dispatch({
+            type: actions.idtuyen,
+            data: "ALL",
+          });
+        else {
+          dispatch({
+            type: actions.idtuyen,
+            data: res?.data[0]?.ma_tuyen,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -65,20 +86,85 @@ function DataFetching() {
   }, []);
 
   useEffect(() => {
-    axios
-      .get(
-        `http://10.0.17.28:8000/thietbituyensfilter/tuyen/` + `${Tuyen}/`
-
-        // `http://10.0.17.28:8000/thietbituyensfilter/tuyen_loai/T6&c%C3%A1ch%20%C4%91i%E1%BB%87n%20th%E1%BB%A7y%20tinh/`
-      )
-      .then((res) => {
-        console.log(res.data);
-        setFilter(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Tuyen &&
+      axios
+        .get(`http://10.0.17.28:8000/thietbituyensfilter/tuyen/` + `${Tuyen}/`)
+        .then((res) => {
+          console.log(res.data);
+          setFilter(res.data);
+          dispatch({ type: actions.anhthietbiloi, data: datathietbiloi });
+          /*dispatch({
+          type: actions.idtuyen,
+          data: [Tuyen],
+        });*/
+          dispatch({
+            type: actions.idtuyen,
+            data: Tuyen,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }, [Tuyen]);
+
+  useEffect(() => {
+    let data = anhthietbiloi[idtuyen]?.[idthietbi]?.[idanh.loai]?.find(
+      (x) => x.ma_thiet_bi === idanh.mathietbi
+    );
+    setdEtail(data);
+  }, [idanh]);
+
+  function renderPic() {
+    let data = dEtail;
+    return (
+      <>
+        <div
+          title={""}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginLeft: "7%",
+            border: "1px solid black",
+            borderRadius: "13px",
+            overflow: "hidden",
+            minWidth: "50%",
+          }}
+        >
+          <TransformWrapper
+            defaultScale={1}
+            defaultPositionX={100}
+            defaultPositionY={200}
+          >
+            <TransformComponent>
+              <img src={data?.anhgoc} height={"100%"} width={"100%"} />
+            </TransformComponent>
+          </TransformWrapper>
+        </div>
+        {/* <div
+          title={""}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginLeft: "7%",
+            border: "1px solid black",
+            borderRadius: "13px",
+            overflow: "hidden",
+            minWidth: "50%",
+          }}
+        >
+          <TransformWrapper
+            defaultScale={1}
+            defaultPositionX={100}
+            defaultPositionY={200}
+          >
+            <TransformComponent>
+              <img src={data?.anhloi} height={"100%"} width={"100%"} />
+            </TransformComponent>
+          </TransformWrapper>
+        </div> */}
+      </>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -136,46 +222,6 @@ function DataFetching() {
                     </FormControl>
                   </Grid>
 
-                  {/* <Grid item xs={6}>
-                    <FormControl
-                      variant="outlined"
-                      style={{
-                        alignSelf: "center",
-                        minWidth: "30%",
-                        marginLeft: 10,
-                      }}
-                    >
-                      <InputLabel id="label-thiet-bi">Thiết bị</InputLabel>
-                      <Select
-                        labelId="label-thiet-bi"
-                        id="labeltb"
-                        value={ListThietbi}
-                        onChange={handleChangetb}
-                        label="Tb"
-                        defaultValue={""}
-                      >
-                        <MenuItem value="cột%20thép%20hình">
-                          <em>cột thép hình</em>
-                        </MenuItem>
-                        <MenuItem value="cột%20đơn%20thân">
-                          <em>cột đơn thân</em>
-                        </MenuItem>
-                        <MenuItem value="cách%20điện%20thủy%20tinh">
-                          <em>cách điện thủy tinh</em>
-                        </MenuItem>
-                        <MenuItem value="cách%20điện%20silicon">
-                          <em>cách điện silicon</em>
-                        </MenuItem>
-                        <MenuItem value="tạ%20chống%20rung">
-                          <em>tạ chống rung</em>
-                        </MenuItem>
-                        <MenuItem value="dây%20điện">
-                          <em>dây điện</em>
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid> */}
-
                   <Grid item xs={12}>
                     <Bieudothongke />
                   </Grid>
@@ -194,290 +240,74 @@ function DataFetching() {
                     style={{
                       overflow: "auto",
                       maxWidth: "100%",
-                      marginTop: "15%",
+                      marginTop: "13%",
                       maxHeight: "414px",
                       variant: "outlined",
                     }}
                   >
-                    {Filter.map((post) => (
+                    <Card variant="outlined">
                       <ul style={{ listStyleType: "none" }}>
-                        {/* <li key={post.ma_thiet_bi}>
+                        <li>
                           <strong>Mã thiết bị: </strong>
-                          {post.ma_thiet_bi}
+                          {dEtail?.ma_thiet_bi}
                         </li>
-                        <li key={post.loai_thiet_bi}>
-                          <strong>Loại thiết bị:</strong> {post.loai_thiet_bi}
+
+                        <li>
+                          <strong>Loại thiết bị: </strong>
+                          {dEtail?.loai_thiet_bi}
                         </li>
-                        <li key={post.ma_thiet_bi}>
+                        <li>
+                          <strong>Tên tuyến: </strong>
+                          {dEtail?.ten_tuyen}
+                        </li>
+                        <li>
                           <strong>Tọa độ: </strong>
-                          {post.toa_do}
+                          {dEtail?.toa_do}
                         </li>
-                        <li key={post.ma_thiet_bi}>
-                          <strong>Trạng thái: </strong>
-                          {post.trang_thai}
-                        </li>
-                        <li key={post.ma_thiet_bi}>
+                        <li>
                           <strong>Ngày vận hành: </strong>
-                          {post.ngay_van_hanh}
+                          {dEtail?.ngay_van_hanh}
                         </li>
-                        <li key={post.ma_thiet_bi}>
+                        <li>
                           <strong>Ngày sửa đổi: </strong>
-                          {post.ngay_sua_doi}
+                          {dEtail?.ngay_sua_doi}
                         </li>
-                        <li key={post.ma_thiet_bi}>
+                        <li>
                           <strong>Ngày lắp đặt: </strong>
-                          {post.ngay_lap_dat}
-                        </li> */}
-                        <li key={post.ma_tuyen}>
-                          <strong>Mã tuyến: </strong>
-                          {post.ma_tuyen}
+                          {dEtail?.ngay_lap_dat}
                         </li>
-                        <li key={post.muc_on_dinh}>
-                          <strong>Muc on dinh: </strong>
-                          {post.muc_on_dinh}
-                        </li>
-                        <li key={post.thiet_bi_cong_trinh_cha}>
-                          <strong>TBCTC: </strong>
-                          {post.thiet_bi_cong_trinh_cha}
+                        <li>
+                          <strong>Mức độ ổn định: </strong>
+                          {dEtail?.mucdoondinh}
                         </li>
                       </ul>
-                    ))}
+                    </Card>
                   </Grid>
                   <Grid item xs={12} style={{ marginTop: "4%" }}>
                     <Card variant="outlined" style={{ height: "100%" }}>
                       <CardContent>
-                        <CardHeader title={"Ảnh thiết bị lỗi"} />
-                        <div
-                          style={{
-                            display: "flex",
-                            overflow: "auto",
-                            marginBottom: "2%",
-                            marginTop: "2%",
-                            minHeight: "60%",
-                            minWidth: "60%",
-                          }}
-                        >
-                          <a>Cach dien thuy tinh:</a>
+                        <>
+                          <CardHeader title={"Ảnh thiết bị lỗi"} />
                           <div
-                            title="anh goc"
                             style={{
                               display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "7%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
+                              overflow: "auto",
+                              marginBottom: "2%",
+                              marginTop: "2%",
+                              minHeight: "60%",
+                              minWidth: "60%",
                             }}
                           >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhcdttgoc}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
+                            <a>
+                              {idanh.loai === "cdtt"
+                                ? "Cach dien thuy tinh:"
+                                : idanh.loai === "cdslc"
+                                ? "Cach dien silicon:"
+                                : "Duong day:"}
+                            </a>
+                            {Object.keys(idanh) != 0 && renderPic()}
                           </div>
-                          <div
-                            title="anh loi 1"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "18%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
-                            }}
-                          >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhcdttloi1}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
-                          </div>
-                          <div
-                            title="anh loi 2"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "7%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
-                            }}
-                          >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhcdttloi2}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
-                          </div>
-                          <div
-                            title="anh loi 3"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "7%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
-                            }}
-                          >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhcdttloi3}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
-                          </div>
-                        </div>
-
-                        <div
-                          style={{
-                            display: "flex",
-                            overflow: "auto",
-                            marginBottom: "2%",
-                            marginTop: "2%",
-                          }}
-                        >
-                          <a>Duong Day:</a>
-                          <div
-                            title="anh goc"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "7%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
-                            }}
-                          >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhdzgoc}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
-                          </div>
-                          <div
-                            title="anh loi 1"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "7%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
-                            }}
-                          >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhdzloi1}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
-                          </div>
-                          <div
-                            title="anh loi 2"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "7%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
-                            }}
-                          >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhdzloi2}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
-                          </div>
-                          <div
-                            title="anh loi 3"
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginLeft: "7%",
-                              border: "1px solid black",
-                              borderRadius: "13px",
-                              overflow: "hidden",
-                              minWidth: "50%",
-                            }}
-                          >
-                            <TransformWrapper
-                              defaultScale={1}
-                              defaultPositionX={100}
-                              defaultPositionY={200}
-                            >
-                              <TransformComponent>
-                                <img
-                                  src={anhdzloi1}
-                                  height={"100%"}
-                                  width={"100%"}
-                                />
-                              </TransformComponent>
-                            </TransformWrapper>
-                          </div>
-                        </div>
+                        </>
                       </CardContent>
                     </Card>
                   </Grid>

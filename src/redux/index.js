@@ -23,6 +23,10 @@ import currentVideoImage from "./reducers/currentVideoImage";
 import SlideVideoShow from "./reducers/SlideVideoShow";
 import sizeResize from "./reducers/sizeResize";
 import pageSize from "./reducers/pageSize";
+import anhthietbiloi from "./reducers/anhthietbiloi";
+import idtuyen from "./reducers/idtuyen";
+import idthietbi from "./reducers/idthietbi";
+import idanh from "./reducers/idanh";
 
 const myReducer = combineReducers({
   cot,
@@ -49,5 +53,9 @@ const myReducer = combineReducers({
   SlideVideoShow,
   sizeResize,
   pageSize,
+  anhthietbiloi,
+  idtuyen,
+  idthietbi,
+  idanh,
 });
 export default myReducer;
