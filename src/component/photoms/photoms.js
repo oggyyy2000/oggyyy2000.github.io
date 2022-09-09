@@ -148,7 +148,7 @@ const PhotoMS = () => {
   useEffect(() => {
     let componentMounted = true;
     const fetchData = async () => {
-      if (componentMounted /*&& !fetchedData*/) {
+      if (componentMounted /*&& !fetchedData */ && fetchedData?.length !== 0) {
         getDataDB().then((res) => {
           if (res) {
             dispatch({
@@ -227,7 +227,7 @@ const PhotoMS = () => {
   useEffect(() => {
     let componentMounted = true;
     const fetchData = async () => {
-      if (componentMounted && fetchedData) {
+      if (componentMounted && fetchedData && fetchedData?.length !== 0) {
         GetImg(fetchedData[0].ma_dot_kiem_tra);
       }
     };
@@ -262,7 +262,7 @@ const PhotoMS = () => {
   useEffect(() => {
     let componentMounted = true;
     const fetchData = async () => {
-      if (componentMounted /*&& !fetchedData2*/) {
+      if (componentMounted /*&& !fetchedData2*/ && fetchedData2?.length !== 0) {
         getDataDB2().then((res) => {
           if (res) {
             dispatch({
@@ -342,7 +342,7 @@ const PhotoMS = () => {
   useEffect(() => {
     let componentMounted = true;
     const fetchData = async () => {
-      if (componentMounted && fetchedData2) {
+      if (componentMounted && fetchedData2 && fetchedData2?.length !== 0) {
         GetImg2(fetchedData2[0].ma_dot_kiem_tra);
       }
     };

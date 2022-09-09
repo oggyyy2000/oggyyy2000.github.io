@@ -164,7 +164,7 @@ export default function DotBay() {
   useEffect(() => {
     let componentMounted = true;
     const fetchData = async () => {
-      if (componentMounted && !fetchedData) {
+      if (componentMounted && !fetchedData && fetchedData?.length !== 0) {
         getDataDB().then((res) => {
           if (res) {
             let data = res.sort(function (a, b) {

@@ -1,30 +1,30 @@
 export const optionltb = [
   {
-    value: "COTTHEPHINH",
+    value: "cot_thep_hinh",
     text: "Cột Thép Hình",
   },
   {
-    value: "COTDONTHAN",
+    value: "cot_don_than",
     text: "Cột Đơn Thân",
   },
   {
-    value: "MONGCOT",
+    value: "mong_cot",
     text: "Móng Cột",
   },
   {
-    value: "CACHDIENSILICOL",
+    value: "cach_dien_silicon",
     text: "Cách Điện Silicol",
   },
   {
-    value: "CACHDIENTHUYTINH",
+    value: "cach_dien_thuy_tinh",
     text: "Cách Điện Thủy Tinh",
   },
   {
-    value: "DAYDIEN",
+    value: "day_dien",
     text: "Dây Điện",
   },
   {
-    value: "DAYCHONGSET",
+    value: "day_chong_set",
     text: "Dây Chống Sét",
   },
 ];

@@ -38,6 +38,7 @@ function DataFetching() {
   const idanh = useSelector((state) => state.idanh);
   const idthietbi = useSelector((state) => state.idthietbi);
   const [dEtail, setdEtail] = useState({});
+  const urlt = process.env.REACT_APP_API_URL + "getalltuyens/";
 
   const handleChangetb = (event) => {
     setListThietBi(event.target.value);
@@ -49,10 +50,12 @@ function DataFetching() {
 
   useEffect(() => {
     axios
-      .get(`http://10.0.17.28:8000/tuyens/`)
+      .get(urlt)
       .then((res) => {
-        setListTuyen(res.data.slice(0, 3));
-        datathietbiloi["ALL"] = {};
+        setListTuyen(res.data);
+        setTuyen(res?.data[0]?.ma_tuyen);
+
+        /*datathietbiloi["ALL"] = {};
 
         console.log(datathietbiloi);
         let keys = Object.keys(datathietbiloi);
@@ -62,13 +65,13 @@ function DataFetching() {
             ...datathietbiloi[keys[i]],
           };
         }
-        console.log(datathietbiloi);
+        console.log(datathietbiloi);*/
         dispatch({ type: actions.anhthietbiloi, data: datathietbiloi });
         // dispatch({
         //   type: actions.idtuyen,
         //   data: Object.keys(datathietbiloi)[0],
         // });
-        if (Tuyen === "")
+        /*if (Tuyen === "")
           dispatch({
             type: actions.idtuyen,
             data: "ALL",
@@ -78,25 +81,25 @@ function DataFetching() {
             type: actions.idtuyen,
             data: res?.data[0]?.ma_tuyen,
           });
-        }
+        }*/
+        dispatch({
+          type: actions.idtuyen,
+          data: res?.data[0]?.ma_tuyen,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     Tuyen &&
       axios
-        .get(`http://10.0.17.28:8000/thietbituyensfilter/tuyen/` + `${Tuyen}/`)
+        .get(`http://10.0.17.28:8000/thietbituyens` + `${Tuyen}/`)
         .then((res) => {
           console.log(res.data);
           setFilter(res.data);
           dispatch({ type: actions.anhthietbiloi, data: datathietbiloi });
-          /*dispatch({
-          type: actions.idtuyen,
-          data: [Tuyen],
-        });*/
           dispatch({
             type: actions.idtuyen,
             data: Tuyen,
@@ -105,7 +108,7 @@ function DataFetching() {
         .catch((err) => {
           console.log(err);
         });
-  }, [Tuyen]);
+  }, [Tuyen]);*/
 
   useEffect(() => {
     let data = anhthietbiloi[idtuyen]?.[idthietbi]?.[idanh.loai]?.find(

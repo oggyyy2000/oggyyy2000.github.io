@@ -118,16 +118,16 @@ const Bieudothongke = (props) => {
     scales: {
       xAxes: [
         {
-          barThickness: 24,
-          maxBarThickness: 30,
-          barPercentage: 1.0,
-          categoryPercentage: 1.0,
           ticks: {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
-            max: 6,
+            max: 11,
           },
+          barThickness: 24,
+          maxBarThickness: 30,
+          barPercentage: 1.0,
+          categoryPercentage: 1.0,
           gridLines: {
             display: false,
             drawBorder: false,
@@ -140,6 +140,7 @@ const Bieudothongke = (props) => {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
+            max: 100,
           },
           gridLines: {
             borderDash: [3],
@@ -177,19 +178,8 @@ const Bieudothongke = (props) => {
             height: 300,
           }}
         >
-          {/* <canvas
-            id="myChart"
-            onClick={ClickHandler}
-            style={{ height: "100%", width: "100%" }}
-          > */}
           <Bar data={data} options={options} onElementsClick={ClickHandler} />
-          {/* </canvas> */}
         </Box>
-        {/* <Box>
-          <div id="myDiv">
-            <img src={noterrorinsuTT} height={75} width={40} />
-          </div>
-        </Box> */}
       </CardContent>
       <Divider />
     </Card>
