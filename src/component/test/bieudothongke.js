@@ -14,29 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../redux/types";
 
 const Bieudothongke = (props) => {
-  // const urlt = "http://10.0.17.28:8000/thietbituyensfilter/tuyen/T4/";
   const [chart, setChart] = useState([]);
   const theme = useTheme();
   const anhthietbiloi = useSelector((state) => state.anhthietbiloi);
   const idtuyen = useSelector((state) => state.idtuyen);
   const dispatch = useDispatch();
 
-  // lay label va value cua data
-  // let TBstable = [];
-  // let TBCTC = [];
-  // axios
-  //   .get(urlt)
-  //   .then((res) => {
-  //     console.log(res.data);
-  //     for (const dataObj of res.data) {
-  //       TBstable.push(dataObj.muc_on_dinh);
-  //       TBCTC.push(dataObj.thiet_bi_cong_trinh_cha);
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // console.log(TBstable, TBCTC);
   const ctx = "myChart";
 
   function ClickHandler(event) {
@@ -96,7 +79,6 @@ const Bieudothongke = (props) => {
       {
         backgroundColor: BackgroundCol,
         data: datamyChart,
-        // label: ` Tinh trang thiet bi`,
       },
     ],
     labels: Object.keys(anhthietbiloi[idtuyen] || {}),
@@ -122,7 +104,7 @@ const Bieudothongke = (props) => {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
-            max: 11,
+            max: 7,
           },
           barThickness: 24,
           maxBarThickness: 30,
