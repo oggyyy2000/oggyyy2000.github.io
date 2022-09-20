@@ -1,0 +1,62 @@
+.tools{
+    background-color: white;
+    display: flex;
+    justify-content: center;
+}
+
+#view_img{
+    display: inline-block;
+    vertical-align: middle;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+} 
+
+.scrollX{
+    overflow: auto;
+    overflow-x: hidden; 
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;  
+    position: relative;
+}
+
+.scrollX::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #F5F5F5;
+}
+
+.scrollX::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.scrollX::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #4285F4; 
+}
+
+.box-img{
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    left: 49%;
+    -webkit-transform: translateX(-49%);
+    -moz-transform: translateX(-49%);
+    transform: translateX(-49%);
+    /*
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    transform: translateY(-50%);
+    */
+}
+
+.middle {
+    top: 50%;
+    transform: translate(-49%, -50%);
+}

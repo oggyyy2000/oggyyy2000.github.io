@@ -1,0 +1,13 @@
+.center_child {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.photo_container {
+    height: 100%;
+    width: 100%;
+    overflow:auto
+}
+.tabpanel_container {
+    background:orange;
+}

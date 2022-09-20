@@ -1,0 +1,24 @@
+.video{
+  height: 100%;
+}
+  
+.log{  
+  height: 100%;  
+  width: 100%;
+}
+
+.map{
+  height: 100%;
+  width: 100%;
+}
+
+.repon{
+  position: relative;
+}
+
+.resizelayout{
+  display:block;
+  position:static;
+  margin-top:400px
+
+}

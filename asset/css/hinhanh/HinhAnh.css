@@ -1,0 +1,24 @@
+.hinhanhContainer{
+    display: flex;
+    height: 100%;
+    background-color: #f0f2f5;
+}
+
+.hinhanhContainer .left{
+    width: 100%;
+    flex: 0.2;
+    background-color: white;
+}
+
+.hinhanhContainer .center{
+    width: 100%;
+    flex: 0.5;
+    background-color: #545454;
+    position: relative;
+}
+
+.hinhanhContainer .right{
+    width: 100%;
+    flex: 0.3;
+    background-color: white;
+}
