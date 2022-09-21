@@ -28,6 +28,7 @@ import DialogImageShow2 from "../generalObject/slideshow-gallery/DialogImageShow
 import DialogVideoShow from "../generalObject/slideshow-gallery/DialogVideoShow";
 //import FiberNewIcon from "@material-ui/icons/FiberNew";
 // data
+/*
 import { T1 } from "../../util/toado/T1";
 import { T2 } from "../../util/toado/T2";
 import { T3 } from "../../util/toado/T3";
@@ -36,6 +37,7 @@ import { T5 } from "../../util/toado/T5";
 import { T6 } from "../../util/toado/T6";
 import { T7 } from "../../util/toado/T7";
 import { T8 } from "../../util/toado/T8";
+*/
 import TodayIcon from "../../asset/Icon.svg";
 ///////////////////////////////////////////
 
@@ -70,13 +72,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 export default function DotBay() {
-  const urltb = process.env.REACT_APP_API_URL + "dotkiemtraimports/";
-  const urlt = process.env.REACT_APP_API_URL + "tuyens/";
-  const urllistvideo = process.env.REACT_APP_API_URL + "getvideodetectimport/";
-  const urllistanh = process.env.REACT_APP_API_URL + "getimagesdetectimport/";
+  const urltb = process.env.REACT_APP_API_URL + "dotkiemtraimports";
+  const urlt = process.env.REACT_APP_API_URL + "getalltuyens";
+  const urllistvideo = process.env.REACT_APP_API_URL + "getvideodetectimport";
+  const urllistanh = process.env.REACT_APP_API_URL + "getimagesdetectimport";
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [ListCot, setListCot] = useState([]);
+  //const [ListCot, setListCot] = useState([]);
   const [Tuyen, setTuyen] = useState(null);
   const [BatDau, setBatDau] = useState(null);
   const [KetThuc, setKetThuc] = useState(null);
@@ -84,6 +86,10 @@ export default function DotBay() {
   const CurrentVideo = useSelector((state) => state.currentVideo);
   const fetchedData = useSelector((state) => state.dbtc);
   const ListTuyen = useSelector((state) => state.listtuyen);
+  const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
+    Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"
+  }`;
+  const [ListVTT, setListVTT] = useState([]);
   let count = 0;
   let NodeIdx = 0;
   let ListTuyenIT = [];
@@ -171,6 +177,52 @@ export default function DotBay() {
       componentMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    async function getDatavtt() {
+      try {
+        let res = await axios({
+          url: urlvt,
+          method: "get",
+          timeout: 8000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status === 200) {
+          //  console.log(res.status);
+        }
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getDatavtt().then((res) => setListVTT(res));
+  }, []);
+
+  useEffect(() => {
+    async function getDatavtt() {
+      try {
+        let res = await axios({
+          url: urlvt,
+          method: "get",
+          timeout: 8000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status === 200) {
+          //  console.log(res.status);
+        }
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getDatavtt().then((res) => setListVTT(res));
+  }, [Tuyen]);
 
   const getdata = () => {
     getDataDB().then((res) => {
@@ -357,7 +409,7 @@ export default function DotBay() {
   const onChangeSelectTuyen = (event) => {
     onChange(event, setTuyen);
     Resset_Cot();
-    switch (event.target.value) {
+    /*switch (event.target.value) {
       case "T1":
         setListCot(T1);
         break;
@@ -385,7 +437,7 @@ export default function DotBay() {
       default:
         setListCot(T1);
         break;
-    }
+    }*/
   };
 
   const onChangeSelectBatDau = (event) => {
@@ -613,18 +665,10 @@ export default function DotBay() {
             onChange={onChangeSelectBatDau}
           >
             <MenuItem value={null}>Trống</MenuItem>
-            {ListCot ? (
-              ListCot.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  value={item.cot + "|" + item.x + "," + item.y}
-                  disabled={
-                    item.cot + "|" + item.x + "," + item.y === KetThuc
-                      ? true
-                      : false
-                  }
-                >
-                  {item.cot}
+            {ListVTT ? (
+              ListVTT.map((item, index) => (
+                <MenuItem key={index} value={item.ma_vi_tri}>
+                  {item.ten_vi_tri}
                 </MenuItem>
               ))
             ) : (
@@ -655,18 +699,10 @@ export default function DotBay() {
             onChange={onChangeSelectKetThuc}
           >
             <MenuItem value={null}>Trống</MenuItem>
-            {ListCot ? (
-              ListCot.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  value={item.cot + "|" + item.x + "," + item.y}
-                  disabled={
-                    item.cot + "|" + item.x + "," + item.y === BatDau
-                      ? true
-                      : false
-                  }
-                >
-                  {item.cot}
+            {ListVTT ? (
+              ListVTT.map((item, index) => (
+                <MenuItem key={index} value={item.ma_vi_tri}>
+                  {item.ten_vi_tri}
                 </MenuItem>
               ))
             ) : (

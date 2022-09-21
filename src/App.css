@@ -32,7 +32,7 @@
   background-color: rgba(82, 64, 120, 0.9) !important;
 }
 
-.navbar li a{
+.navbar li a {
   color: white !important;
 }
 
@@ -40,33 +40,30 @@
   color: black !important;
 }
 
-
-.carousel-inner img{
+.carousel-inner img {
   width: 100%;
-
 }
 
 .jumbotron {
   padding: 1rem;
   border-radius: 0;
-
 }
 
-.welcome hr{
-  border-top: 2px solid rgba(62,44,100, 0.6);
+.welcome hr {
+  border-top: 2px solid rgba(62, 44, 100, 0.6);
   width: 95%;
   margin-bottom: 2rem;
 }
 
-.fa-angular{
+.fa-angular {
   font-size: 5rem;
 }
 
-.fa-react{
+.fa-react {
   font-size: 5rem;
 }
 
-.fa-css3{
+.fa-css3 {
   font-size: 5rem;
 }
 
@@ -84,11 +81,35 @@
   }
 }
 
-.sort_selected::after{
-  content: '\f00c';
+.sort_selected::after {
+  content: "\f00c";
   font-family: FontAwesome;
   font-weight: normal;
   font-style: normal;
   margin: 0px 0px 0px 10px;
   display: inline-block;
+}
+
+.scr1 {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin: 0;
+}
+
+.fullscreen-enabled .my-component {
+  background: #000;
+}
+
+.btnMap {
+  position: absolute;
+  float: right;
+  top: 5px;
+  right: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+.btnMap:focus {
+  outline: none;
 }

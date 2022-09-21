@@ -26,62 +26,74 @@ const Bieudothongke = (props) => {
     const firstPoint = event[0];
     if (firstPoint) {
       const label = data.labels[firstPoint._index];
+
       const value =
         data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
       dispatch({ type: actions.idthietbi, data: label });
     }
   }
 
-  const CalcData = () => {
-    let ArrayKey = Object.keys(anhthietbiloi[idtuyen] || {});
+  const MakeData = () => {
+    let DataObj = {};
     let ArrayAvg = [];
-    for (let i = 0; i < ArrayKey.length; i++) {
-      let data = anhthietbiloi[idtuyen][ArrayKey[i]];
-      let sum = 0;
-      for (let j = 0; j < data.cdtt.length; j++) {
-        sum += parseInt(data.cdtt[j]?.mucdoondinh || 0);
-      }
-
-      for (let j = 0; j < data.cdslc.length; j++) {
-        sum += parseInt(data.cdslc[j]?.mucdoondinh || 0);
-      }
-
-      for (let j = 0; j < data.dday.length; j++) {
-        sum += parseInt(data.dday[j]?.mucdoondinh || 0);
-      }
-
-      let len = data.cdtt.length + data.cdslc.length + data.dday.length;
-
-      let avg = sum / len;
-      ArrayAvg.push(avg.toFixed(2));
-    }
-
-    return ArrayAvg;
-  };
-
-  const BackgroundCol = () => {
+    let labels = [];
     let backgroundColor = [];
-    for (let i = 0; i < datamyChart.length; i++) {
-      if (datamyChart[i] >= 70) {
-        backgroundColor.push("rgb(0,255,0)");
-      } else if (datamyChart[i] >= 50) {
-        backgroundColor.push("rgb(255,255,0)");
-      } else backgroundColor.push("rgb(255,0,0)");
+    let data = anhthietbiloi?.data || [];
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        let item = data[i];
+        let inneritem = item[Object.keys(item)[0]];
+
+        let classItem = [
+          "cach_dien_silicon",
+          "cach_dien_thuy_tinh",
+          "day_dien",
+        ];
+        let sumerror = 0;
+        let len = 0;
+        for (let j = 0; j < classItem.length; j++) {
+          let classItemName = classItem[j];
+          let classItemValue = inneritem[classItemName];
+          if (classItemValue) {
+            for (let x = 0; x < classItemValue.length; x++) {
+              if (classItemValue[x].trang_thai != "1_normal") {
+                sumerror += 1;
+              }
+              len += 1;
+            }
+          }
+        }
+        let avg = sumerror !== 0 ? sumerror / len : len;
+        if (len !== 0) {
+          ArrayAvg.push(avg.toFixed(2));
+
+          if (avg >= 1) {
+            backgroundColor.push("rgb(0,255,0)");
+          } else if (avg >= 0.5) {
+            backgroundColor.push("rgb(255,255,0)");
+          } else backgroundColor.push("rgb(255,0,0)");
+
+          labels.push(Object.keys(item)[0]);
+        }
+      }
     }
 
-    return backgroundColor;
+    DataObj["Avg"] = ArrayAvg;
+    DataObj["backgroundColor"] = backgroundColor;
+    DataObj["labels"] = labels;
+
+    return DataObj;
   };
 
-  let datamyChart = CalcData();
-
+  let datamyChart = MakeData();
   const data = {
     datasets: [
       {
-        backgroundColor: BackgroundCol,
-        data: datamyChart,
+        backgroundColor: datamyChart.backgroundColor,
+        data: datamyChart.Avg,
       },
     ],
-    labels: Object.keys(anhthietbiloi[idtuyen] || {}),
+    labels: datamyChart.labels,
   };
 
   const options = {
@@ -122,7 +134,7 @@ const Bieudothongke = (props) => {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
-            max: 100,
+            max: 5,
           },
           gridLines: {
             borderDash: [3],
@@ -137,15 +149,6 @@ const Bieudothongke = (props) => {
       ],
     },
     tooltips: {
-      // backgroundColor: theme.palette.background.paper,
-      // bodyFontColor: theme.palette.text.secondary,
-      // borderColor: theme.palette.divider,
-      // borderWidth: 1,
-      // enabled: true,
-      // footerFontColor: theme.palette.text.secondary,
-      // intersect: false,
-      // mode: "index",
-      // titleFontColor: theme.palette.text.primary,
       enabled: false,
     },
   };

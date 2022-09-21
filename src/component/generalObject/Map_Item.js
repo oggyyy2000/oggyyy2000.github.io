@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import "../../asset/css/panel.css";
 import {
   GoogleMap,
@@ -12,7 +12,10 @@ import { store } from "../../index";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import Box from "@material-ui/core/Box";
 import $ from "jquery";
+import FullscreenIcon from "@material-ui/icons/Fullscreen";
+import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
 // data
+/*
 import { T1 } from "../../util/toado/T1";
 import { T2 } from "../../util/toado/T2";
 import { T3 } from "../../util/toado/T3";
@@ -21,6 +24,7 @@ import { T5 } from "../../util/toado/T5";
 import { T6 } from "../../util/toado/T6";
 import { T7 } from "../../util/toado/T7";
 import { T8 } from "../../util/toado/T8";
+*/
 ///////////////////////////////////////////
 import {
   FaCompass,
@@ -33,6 +37,9 @@ import { WiHumidity } from "react-icons/wi";
 import { WeatherContext } from "../main/contexts/WeatherContext";
 import * as actions from "../../redux/types";
 import { Line } from "react-chartjs-2";
+import axios from "axios";
+import { ImageTwoTone } from "@material-ui/icons";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 const API_KEY = "AIzaSyAxTvKumZ34dP0Qf_veNQoliDMC5GgrblM";
 
@@ -52,10 +59,36 @@ const Map_Item = () => {
   // Redux
   const Redux_cot = useSelector((state) => state.cot);
   const Redux_tuyen = useSelector((state) => state.tuyen);
+  const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
+    Redux_tuyen ? "&ma_tuyen=" + Redux_tuyen : "&none=0"
+  }`;
+  const [ListVTT, setListVTT] = useState([]);
   const ModeShowVideo = useSelector((state) => state.modeshowvideo);
   const Typewsdata = useSelector((state) => state.typewsdata);
   const Toado = useSelector((state) => state.wstoado2);
   const dispatch = useDispatch();
+  const screen1 = useFullScreenHandle();
+  const [stateBtn, setStateBtn] = useState(false);
+
+  const reportChange = useCallback(
+    (state, handle) => {
+      if (handle === screen1) {
+        setStateBtn(state);
+      }
+    },
+    [screen1]
+  );
+
+  useEffect(() => {
+    setTimeout(() => {
+      let elm = document.querySelectorAll(
+        "#map_container > div > div > div.map > div:nth-child(2) > table > tr > td:nth-child(2) > button"
+      )[0];
+      if (elm) {
+        elm.click();
+      }
+    }, 50);
+  });
 
   function heightmap() {
     if ($("#map")) {
@@ -92,6 +125,52 @@ const Map_Item = () => {
     };
   }, []);
 
+  useEffect(() => {
+    async function getDatavtt() {
+      try {
+        let res = await axios({
+          url: urlvt,
+          method: "get",
+          timeout: 8000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status === 200) {
+          //  console.log(res.status);
+        }
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getDatavtt().then((res) => setListVTT(res));
+  }, []);
+
+  useEffect(() => {
+    async function getDatavtt() {
+      try {
+        let res = await axios({
+          url: urlvt,
+          method: "get",
+          timeout: 8000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status === 200) {
+          //  console.log(res.status);
+        }
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getDatavtt().then((res) => setListVTT(res));
+  }, [Redux_tuyen]);
+
   var index1 = 0;
   var index2 = 0;
 
@@ -100,28 +179,24 @@ const Map_Item = () => {
     /// tìm vị trí cột trong array
     if (Redux_cot) {
       if (Redux_cot.length === 2) {
-        const Item0 = Redux_cot[0]["toa_do_vi_tri"] + "";
-        const lat0 = parseFloat(Item0.split(",")[0]),
-          lng0 = parseFloat(Item0.split(",")[1]);
-        const Item1 = Redux_cot[1]["toa_do_vi_tri"] + "";
-        const lat1 = parseFloat(Item1.split(",")[0]),
-          lng1 = parseFloat(Item1.split(",")[1]);
+        const Item0 = Redux_cot[0]["toa_do_vi_tri"];
+        const Item1 = Redux_cot[1]["toa_do_vi_tri"];
         // tìm vị trí ( thử tự cột )
-        index1 = str.findIndex(
-          (item) =>
-            parseFloat(item.x) === parseFloat(lat0) &&
-            parseFloat(item.y) === parseFloat(lng0)
-        );
-        index2 = str.findIndex(
-          (item) =>
-            parseFloat(item.x) === parseFloat(lat1) &&
-            parseFloat(item.y) === parseFloat(lng1)
-        );
+        index1 = str.findIndex((item) => item.toa_do == Item0);
+        index2 = str.findIndex((item) => item.toa_do == Item1);
         /// tìm các cột ở giữa nếu có
         var max = index1 > index2 ? index1 : index2;
         var min = index2 < index1 ? index2 : index1;
         for (var i = min; i <= max; i++) {
-          pluginArrayArg.push(str[i]);
+          var jsonArg1 = new Object();
+          if (str[i]?.toa_do !== "") {
+            jsonArg1.cot = str[i]?.ma_vi_tri;
+            const lat = parseFloat(str[i]?.toa_do?.split(",")[0]),
+              lng = parseFloat(str[i]?.toa_do?.split(",")[1]);
+            jsonArg1.x = lat;
+            jsonArg1.y = lng;
+            pluginArrayArg.push(jsonArg1);
+          }
         }
         // loại bỏ underfined nếu có
         var filtered = pluginArrayArg.filter(function (x) {
@@ -129,19 +204,23 @@ const Map_Item = () => {
         });
         SetLinePoint(filtered);
       } else if (Redux_cot.length === 1) {
-        const Item = Redux_cot[0]["toa_do_vi_tri"] + "";
-        const lat = parseFloat(Item.split(",")[0]),
-          lng = parseFloat(Item.split(",")[1]);
-        var jsonArg1 = new Object();
-        jsonArg1.cot = Item["cot"];
-        jsonArg1.x = lat;
-        jsonArg1.y = lng;
-        pluginArrayArg.push(jsonArg1);
-        // loại bỏ underfined nếu có
-        var filtered = pluginArrayArg.filter(function (x) {
-          return x !== undefined;
-        });
-        SetLinePoint(filtered);
+        const Item = Redux_cot[0]["toa_do_vi_tri"];
+        if (Item !== "") {
+          const lat = parseFloat(Item.split(",")[0]),
+            lng = parseFloat(Item.split(",")[1]);
+          var jsonArg1 = new Object();
+          jsonArg1.cot = Redux_cot[0]["cot"];
+          jsonArg1.x = lat;
+          jsonArg1.y = lng;
+          pluginArrayArg.push(jsonArg1);
+          // loại bỏ underfined nếu có
+          var filtered = pluginArrayArg.filter(function (x) {
+            return x !== undefined;
+          });
+          SetLinePoint(filtered);
+        } else {
+          SetLinePoint([]);
+        }
       }
     }
     //////////////////////////////////////////////
@@ -152,9 +231,12 @@ const Map_Item = () => {
   }, [LinePoint]);
 
   const calc_center = (Point) => {
-    if (Point) {
+    if (Point && Point.length > 0) {
       var mid = Math.round((Point.length - 1) / 2);
-      if (Point[parseInt(mid)]) {
+      if (isNaN(Point[parseInt(mid)].x)) {
+        setCenter({ lat: 21, lng: 105 });
+        setZoomsize(15);
+      } else if (Point[parseInt(mid)]) {
         setCenter({
           lat: Point[parseInt(mid)].x,
           lng: Point[parseInt(mid)].y,
@@ -169,10 +251,12 @@ const Map_Item = () => {
       // draw polyline
       if (ModeShowVideo !== "Live" || Typewsdata === "IMG") {
         for (var i = 0; i < Point.length; i++) {
-          pathCoordinates.push({
-            lat: parseFloat(Point[i].x),
-            lng: parseFloat(Point[i].y),
-          });
+          if (!isNaN(parseFloat(Point[i].x))) {
+            pathCoordinates.push({
+              lat: parseFloat(Point[i].x),
+              lng: parseFloat(Point[i].y),
+            });
+          }
         }
         SetPathPoint(pathCoordinates);
       }
@@ -198,39 +282,7 @@ const Map_Item = () => {
   }, [Toado]);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (Redux_tuyen) {
-        switch (Redux_tuyen) {
-          case "T1":
-            findobj(T1);
-            break;
-          case "T2":
-            findobj(T2);
-            break;
-          case "T3":
-            findobj(T3);
-            break;
-          case "T4":
-            findobj(T4);
-            break;
-          case "T5":
-            findobj(T5);
-            break;
-          case "T6":
-            findobj(T6);
-            break;
-          case "T7":
-            findobj(T7);
-            break;
-          case "T8":
-            findobj(T8);
-            break;
-          default:
-            findobj(T1);
-            break;
-        }
-      }
-    }, 50);
+    findobj(ListVTT);
   }, [Redux_cot]);
 
   // Function - Onclick
@@ -268,38 +320,40 @@ const Map_Item = () => {
               const cot = item["cot"],
                 lat = parseFloat(item["x"]),
                 lng = parseFloat(item["y"]);
-              return (
-                <Marker
-                  key={index}
-                  icon={
-                    index !== 0 && index !== LinePoint.length - 1
-                      ? iconMarker
-                      : null
-                  }
-                  draggable={true}
-                  onDragEnd={onMarkerDragEnd}
-                  position={{ lat: lat, lng: lng }}
-                  onClick={() => {
-                    SetshowInfoIndex(index);
-                    /* zoom(item)*/
-                  }}
-                >
-                  {index === 0 ||
-                  index === LinePoint.length - 1 ||
-                  showInfoIndex === index ? (
-                    <InfoWindow onCloseClick={() => SetshowInfoIndex(-1)}>
-                      <Box style={{ color: "black", width: 100 }}>
-                        <b>Cột: {cot}</b>
-                        <p>
-                          Tọa độ: {lat} , {lng}
-                        </p>
-                      </Box>
-                    </InfoWindow>
-                  ) : (
-                    ""
-                  )}
-                </Marker>
-              );
+              if (!isNaN(lat)) {
+                return (
+                  <Marker
+                    key={index}
+                    icon={
+                      index !== 0 && index !== LinePoint.length - 1
+                        ? iconMarker
+                        : null
+                    }
+                    draggable={true}
+                    onDragEnd={onMarkerDragEnd}
+                    position={{ lat: lat, lng: lng }}
+                    onClick={() => {
+                      SetshowInfoIndex(index);
+                      /* zoom(item)*/
+                    }}
+                  >
+                    {index === 0 ||
+                    index === LinePoint.length - 1 ||
+                    showInfoIndex === index ? (
+                      <InfoWindow onCloseClick={() => SetshowInfoIndex(-1)}>
+                        <Box style={{ color: "black", width: 140 }}>
+                          <b>Cột: {cot}</b>
+                          <p>
+                            Tọa độ: {lat} , {lng}
+                          </p>
+                        </Box>
+                      </InfoWindow>
+                    ) : (
+                      ""
+                    )}
+                  </Marker>
+                );
+              }
             })
           : ""}
         {pathPoint && (
@@ -333,7 +387,7 @@ const Map_Item = () => {
             lng: parseFloat(center.lng),
           }}
           options={{
-            fullscreenControl: true,
+            fullscreenControl: false,
           }}
         >
           {ModeShowVideo !== "Live" ? rendermap1() : ""}
@@ -399,12 +453,23 @@ const Map_Item = () => {
       style={{ height: "100%", width: "100%", transform: "translateY(0)" }}
     >
       <Provider store={store}>
-        <MapWithAMarker
-          googleMapURL={link}
-          loadingElement={<div className="map" />}
-          containerElement={<div className="map" />}
-          mapElement={<div className="map" />}
-        />
+        <FullScreen className="scr1" handle={screen1} onChange={reportChange}>
+          <MapWithAMarker
+            googleMapURL={link}
+            loadingElement={<div className="map" />}
+            containerElement={<div className="map" />}
+            mapElement={<div className="map" />}
+          />
+          {!stateBtn ? (
+            <button className="btnMap" onClick={screen1.enter}>
+              <FullscreenIcon style={{ width: 35, height: 35 }} />
+            </button>
+          ) : (
+            <button className="btnMap" onClick={screen1.exit}>
+              <FullscreenExitIcon style={{ width: 35, height: 35 }} />
+            </button>
+          )}
+        </FullScreen>
       </Provider>
     </Box>
   );

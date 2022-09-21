@@ -21,6 +21,7 @@ export default function Map() {
   const windspeedConverter = (val) => {
     return parseFloat(val * 3.6).toFixed(2);
   };
+
   return (
     <>
       <Map_Item />

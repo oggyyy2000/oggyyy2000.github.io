@@ -19,14 +19,14 @@ import TextField from "@material-ui/core/TextField";
 //-----------------------------------------
 import Loading from "../../generalObject/Loading";
 // data
-import { T1 } from "../../../util/toado/T1";
+/*import { T1 } from "../../../util/toado/T1";
 import { T2 } from "../../../util/toado/T2";
 import { T3 } from "../../../util/toado/T3";
 import { T4 } from "../../../util/toado/T4";
 import { T5 } from "../../../util/toado/T5";
 import { T6 } from "../../../util/toado/T6";
 import { T7 } from "../../../util/toado/T7";
-import { T8 } from "../../../util/toado/T8";
+import { T8 } from "../../../util/toado/T8";*/
 ///////////////////////////////////////////
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../redux/types";
@@ -103,7 +103,7 @@ export default function DialogSavePopup(props) {
   // const urltb = process.env.REACT_APP_API_URL + "dotkiemtras/";
   // const urlt = process.env.REACT_APP_API_URL + "tuyens/";
   // const urlv = process.env.REACT_APP_API_URL + "videoimports/";
-  const urltdkt = process.env.REACT_APP_API_URL + "dotkiemtraimports/";
+  const urltdkt = process.env.REACT_APP_API_URL + "dotkiemtraimports";
   const classes = useStyles();
   //const [ListTuyen, setListTuyen] = useState([]);
   //const [fetchedData, setFetchedData] = useState([]);
@@ -131,6 +131,10 @@ export default function DialogSavePopup(props) {
   const [Done, setDone] = useState(false);
   const [ThisDot, setThisDot] = useState(null);
   const [selectedFile, SetSelectedFile] = useState(null);
+  const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
+    Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"
+  }`;
+  const [ListVTT, setListVTT] = useState([]);
 
   const dispatch = useDispatch();
   const [oldDB, setOldDb] = useState(null);
@@ -169,7 +173,7 @@ export default function DialogSavePopup(props) {
 
   const Change_List_Cot = (value) => {
     Resset_Cot();
-    switch (value) {
+    /* switch (value) {
       case "T1":
         setListCot(T1);
         break;
@@ -197,8 +201,54 @@ export default function DialogSavePopup(props) {
       default:
         setListCot(T1);
         break;
-    }
+    }*/
   };
+
+  useEffect(() => {
+    async function getDatavtt() {
+      try {
+        let res = await axios({
+          url: urlvt,
+          method: "get",
+          timeout: 8000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status === 200) {
+          //  console.log(res.status);
+        }
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getDatavtt().then((res) => setListVTT(res));
+  }, []);
+
+  useEffect(() => {
+    async function getDatavtt() {
+      try {
+        let res = await axios({
+          url: urlvt,
+          method: "get",
+          timeout: 8000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (res.status === 200) {
+          //  console.log(res.status);
+        }
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    getDatavtt().then((res) => setListVTT(res));
+  }, [Tuyen]);
 
   const resetvaluedf = () => {
     setDateDB(values.someDate);
@@ -514,7 +564,7 @@ export default function DialogSavePopup(props) {
           bat_dau_doan: batdau,
           ket_thuc_doan: ketthuc,
           ngay_kiem_tra: formatDate(DateDB),
-          hinh_thuc_kiem_tra: "NGAY",
+          hinh_thuc_kiem_tra: "ngay",
         })
         .then(
           (response) => {
@@ -591,18 +641,18 @@ export default function DialogSavePopup(props) {
               onChange={onChangeSelectBatDau}
             >
               <MenuItem value={null}>Trống</MenuItem>
-              {ListCot ? (
-                ListCot.map((item, index) => (
+              {ListVTT ? (
+                ListVTT.map((item, index) => (
                   <MenuItem
                     key={index}
-                    value={item.cot + "|" + item.x + "," + item.y}
+                    value={item.ma_vi_tri + "|" + item.toa_do}
                     disabled={
-                      item.cot + "|" + item.x + "," + item.y === KetThuc
+                      item.ma_vi_tri + "|" + item.toa_do === KetThuc
                         ? true
                         : false
                     }
                   >
-                    {item.cot}
+                    {item.ten_vi_tri}
                   </MenuItem>
                 ))
               ) : (
@@ -633,18 +683,18 @@ export default function DialogSavePopup(props) {
               onChange={onChangeSelectKetThuc}
             >
               <MenuItem value={null}>Trống</MenuItem>
-              {ListCot ? (
-                ListCot.map((item, index) => (
+              {ListVTT ? (
+                ListVTT.map((item, index) => (
                   <MenuItem
                     key={index}
-                    value={item.cot + "|" + item.x + "," + item.y}
+                    value={item.ma_vi_tri + "|" + item.toa_do}
                     disabled={
-                      item.cot + "|" + item.x + "," + item.y === BatDau
+                      item.ma_vi_tri + "|" + item.toa_do === BatDau
                         ? true
                         : false
                     }
                   >
-                    {item.cot}
+                    {item.ten_vi_tri}
                   </MenuItem>
                 ))
               ) : (

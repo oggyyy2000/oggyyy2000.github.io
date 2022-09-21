@@ -24,15 +24,195 @@ const MucDoLoi = () => {
   const dispatch = useDispatch();
   const idanh = useSelector((state) => state.idanh);
 
-  function HandleClickDiv(event, value, loai) {
+  function HandleClickDiv(value, loai) {
     let obj = {};
     obj.loai = loai;
-    obj.mathietbi = value.ma_thiet_bi;
+    obj.ma_thiet_bi = value.ma_thiet_bi;
+    console.log(obj);
+    console.log(value);
     dispatch({
       type: actions.idanh,
       data: obj,
     });
   }
+
+  let findbykeyinarray = (array, value) => {
+    for (let i = 0; i < array.length; i++) {
+      if (Object.keys(array[i])[0] == value) {
+        return array[i];
+      }
+    }
+  };
+
+  const classItem = ["cach_dien_silicon", "cach_dien_thuy_tinh", "day_dien"];
+
+  const RenderItem0 = () => {
+    let data = anhthietbiloi?.data || [];
+    let item = findbykeyinarray(data, idthietbi);
+    if (item) {
+      let inneritem = item[Object.keys(item)[0]];
+
+      return (
+        <>
+          <Typography variant="h5" component="h2">
+            {inneritem[classItem[0]] ? classItem[0] : ""}
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              overflow: "auto",
+              marginBottom: "2%",
+              marginTop: "2%",
+            }}
+          >
+            {inneritem[classItem[0]]
+              ? inneritem[classItem[0]].map((value, index) => (
+                  <>
+                    <div
+                      key={value.ma_thiet_bi}
+                      onClick={(e) => HandleClickDiv(value, classItem[0])}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginLeft: "7%",
+                        border: "1px solid black",
+                        borderRadius: "13px",
+                        overflow: "hidden",
+                        minWidth: "7%",
+                      }}
+                    >
+                      <img
+                        src={
+                          value.trang_thai === "1_normal"
+                            ? noterrorinsuSLC
+                            : value.trang_thai === "2_defect_detected"
+                            ? warninsuSLC
+                            : errorinsuSLC
+                        }
+                        height={75}
+                        width={40}
+                      />
+                    </div>
+                  </>
+                ))
+              : ""}
+          </div>
+        </>
+      );
+    }
+  };
+
+  const RenderItem1 = () => {
+    let data = anhthietbiloi?.data || [];
+    let item = findbykeyinarray(data, idthietbi);
+    if (item) {
+      let inneritem = item[Object.keys(item)[0]];
+
+      return (
+        <>
+          <Typography variant="h5" component="h2">
+            {inneritem[classItem[1]] ? classItem[1] : ""}
+          </Typography>{" "}
+          <div
+            style={{
+              display: "flex",
+              overflow: "auto",
+              marginBottom: "2%",
+              marginTop: "2%",
+            }}
+          >
+            {inneritem[classItem[1]]
+              ? inneritem[classItem[1]].map((value, index) => (
+                  <>
+                    <div
+                      key={value.ma_thiet_bi}
+                      onClick={(e) => HandleClickDiv(value, classItem[1])}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginLeft: "7%",
+                        border: "1px solid black",
+                        borderRadius: "13px",
+                        overflow: "hidden",
+                        minWidth: "7%",
+                      }}
+                    >
+                      <img
+                        src={
+                          value.trang_thai === "1_normal"
+                            ? noterrorinsuTT
+                            : value.trang_thai === "2_defect_detected"
+                            ? warninsuTT
+                            : errorinsuTT
+                        }
+                        height={75}
+                        width={40}
+                      />
+                    </div>
+                  </>
+                ))
+              : ""}
+          </div>
+        </>
+      );
+    }
+  };
+
+  const RenderItem2 = () => {
+    let data = anhthietbiloi?.data || [];
+    let item = findbykeyinarray(data, idthietbi);
+    if (item) {
+      let inneritem = item[Object.keys(item)[0]];
+
+      return (
+        <>
+          <Typography variant="h5" component="h2">
+            {inneritem[classItem[2]] ? classItem[2] : ""}
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              overflow: "auto",
+              marginBottom: "2%",
+              marginTop: "2%",
+            }}
+          >
+            {inneritem[classItem[2]]
+              ? inneritem[classItem[2]].map((value, index) => (
+                  <>
+                    <div
+                      key={value.ma_thiet_bi}
+                      onClick={(e) => HandleClickDiv(value, classItem[2])}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginLeft: "7%",
+                        border: "1px solid black",
+                        borderRadius: "13px",
+                        overflow: "hidden",
+                        minWidth: "7%",
+                      }}
+                    >
+                      <img
+                        src={
+                          value.trang_thai === "1_normal"
+                            ? noterrorDZ
+                            : value.trang_thai === "2_defect_detected"
+                            ? warnDZ
+                            : errorDZ
+                        }
+                        height={75}
+                        width={40}
+                      />
+                    </div>
+                  </>
+                ))
+              : ""}
+          </div>
+        </>
+      );
+    }
+  };
 
   return (
     <Card
@@ -41,134 +221,9 @@ const MucDoLoi = () => {
       style={{ height: "100%" }}
     >
       <CardContent>
-        <Typography variant="h5" component="h2">
-          Cach dien thuy tinh:
-        </Typography>
-
-        <div
-          style={{
-            display: "flex",
-            overflow: "auto",
-            marginBottom: "2%",
-            marginTop: "2%",
-          }}
-        >
-          {anhthietbiloi[idtuyen]?.[idthietbi]?.cdtt?.map((value, index) => (
-            <>
-              <div
-                onClick={(e) => HandleClickDiv(e, value, "cdtt")}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginLeft: "7%",
-                  border: "1px solid black",
-                  borderRadius: "13px",
-                  overflow: "hidden",
-                  minWidth: "7%",
-                }}
-              >
-                <img
-                  src={
-                    value.mucdoondinh >= 70
-                      ? noterrorinsuTT
-                      : value.mucdoondinh >= 50
-                      ? warninsuTT
-                      : errorinsuTT
-                  }
-                  height={75}
-                  width={40}
-                />
-              </div>
-            </>
-          ))}
-        </div>
-
-        {/* #-------------------------------------------------------- */}
-        <Typography variant="h5" component="h2">
-          Cach dien silicon:
-        </Typography>
-        <div
-          style={{
-            display: "flex",
-            marginBottom: "2%",
-            marginTop: "2%",
-            overflow: "auto",
-          }}
-        >
-          {anhthietbiloi[idtuyen]?.[idthietbi]?.cdslc?.map((value, index) => (
-            <>
-              <div
-                onClick={(e) => HandleClickDiv(e, value, "cdslc")}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: "7%",
-                  border: "1px solid black",
-                  borderRadius: "13px",
-                  overflow: "hidden",
-                  minWidth: "6%",
-                }}
-              >
-                <img
-                  src={
-                    value.mucdoondinh >= 70
-                      ? noterrorinsuSLC
-                      : value.mucdoondinh >= 50
-                      ? warninsuSLC
-                      : errorinsuSLC
-                  }
-                  height={75}
-                  width={40}
-                />
-              </div>
-            </>
-          ))}
-        </div>
-
-        {/* #-------------------------------------------------------- */}
-        <Typography variant="h5" component="h2">
-          Duong day:
-        </Typography>
-        <div
-          style={{
-            display: "flex",
-            marginBottom: "2%",
-            marginTop: "2%",
-            overflow: "auto",
-          }}
-        >
-          {anhthietbiloi[idtuyen]?.[idthietbi]?.dday?.map((value, index) => (
-            <>
-              <div
-                onClick={(e) => HandleClickDiv(e, value, "dday")}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: "7%",
-                  border: "1px solid black",
-                  borderRadius: "13px",
-                  overflow: "hidden",
-                  height: "45px",
-                  width: "115px",
-                }}
-              >
-                <img
-                  src={
-                    value.mucdoondinh >= 70
-                      ? noterrorDZ
-                      : value.mucdoondinh >= 50
-                      ? warnDZ
-                      : errorDZ
-                  }
-                  height={35}
-                  width={100}
-                />
-              </div>
-            </>
-          ))}
-        </div>
+        {RenderItem0()}
+        {RenderItem1()}
+        {RenderItem2()}
       </CardContent>
     </Card>
   );

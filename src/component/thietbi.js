@@ -64,7 +64,7 @@ export default function ThietBi() {
   }getallthietbituyens?page=${page}${Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"}${
     Loai ? "&loai_thiet_bi=" + Loai : "&none=0"
   }${VTT ? "&ma_vi_tri=" + VTT : "&none=0"}`;
-  const urlt = process.env.REACT_APP_API_URL + "getalltuyens/";
+  const urlt = process.env.REACT_APP_API_URL + "getalltuyens";
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
     Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"
   }`;
@@ -494,7 +494,7 @@ export default function ThietBi() {
             <div style={{ marginTop: 10 }}>
               <Pagination
                 className={classes.pagination}
-                count={fetchedData?.last_page}
+                count={fetchedData?.last_page || 0}
                 size="large"
                 page={page}
                 color="primary"
