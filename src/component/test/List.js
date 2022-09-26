@@ -51,54 +51,54 @@ const MucDoLoi = () => {
     let item = findbykeyinarray(data, idthietbi);
     if (item) {
       let inneritem = item[Object.keys(item)[0]];
-
-      return (
-        <>
-          <Typography variant="h5" component="h2">
-            {inneritem[classItem[0]] ? classItem[0] : ""}
-          </Typography>
-          <div
-            style={{
-              display: "flex",
-              overflow: "auto",
-              marginBottom: "2%",
-              marginTop: "2%",
-            }}
-          >
-            {inneritem[classItem[0]]
-              ? inneritem[classItem[0]].map((value, index) => (
-                  <>
-                    <div
-                      key={value.ma_thiet_bi}
-                      onClick={(e) => HandleClickDiv(value, classItem[0])}
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginLeft: "7%",
-                        border: "1px solid black",
-                        borderRadius: "13px",
-                        overflow: "hidden",
-                        minWidth: "7%",
-                      }}
-                    >
-                      <img
-                        src={
-                          value.trang_thai === "1_normal"
-                            ? noterrorinsuSLC
-                            : value.trang_thai === "2_defect_detected"
-                            ? warninsuSLC
-                            : errorinsuSLC
-                        }
-                        height={75}
-                        width={40}
-                      />
-                    </div>
-                  </>
-                ))
-              : ""}
-          </div>
-        </>
-      );
+      if (inneritem[classItem[0]])
+        return (
+          <>
+            <Typography variant="h5" component="h2">
+              {inneritem[classItem[0]] ? classItem[0] : ""}
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                overflow: "auto",
+                marginBottom: "2%",
+                marginTop: "2%",
+              }}
+            >
+              {inneritem[classItem[0]]
+                ? inneritem[classItem[0]].map((value, index) => (
+                    <>
+                      <div
+                        key={value.ma_thiet_bi}
+                        onClick={(e) => HandleClickDiv(value, classItem[0])}
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          marginLeft: "7%",
+                          border: "1px solid black",
+                          borderRadius: "13px",
+                          overflow: "hidden",
+                          minWidth: "7%",
+                        }}
+                      >
+                        <img
+                          src={
+                            value.trang_thai === "1_normal"
+                              ? noterrorinsuSLC
+                              : value.trang_thai === "2_defect_detected"
+                              ? warninsuSLC
+                              : errorinsuSLC
+                          }
+                          height={75}
+                          width={40}
+                        />
+                      </div>
+                    </>
+                  ))
+                : ""}
+            </div>
+          </>
+        );
     }
   };
 
@@ -107,54 +107,54 @@ const MucDoLoi = () => {
     let item = findbykeyinarray(data, idthietbi);
     if (item) {
       let inneritem = item[Object.keys(item)[0]];
-
-      return (
-        <>
-          <Typography variant="h5" component="h2">
-            {inneritem[classItem[1]] ? classItem[1] : ""}
-          </Typography>{" "}
-          <div
-            style={{
-              display: "flex",
-              overflow: "auto",
-              marginBottom: "2%",
-              marginTop: "2%",
-            }}
-          >
-            {inneritem[classItem[1]]
-              ? inneritem[classItem[1]].map((value, index) => (
-                  <>
-                    <div
-                      key={value.ma_thiet_bi}
-                      onClick={(e) => HandleClickDiv(value, classItem[1])}
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginLeft: "7%",
-                        border: "1px solid black",
-                        borderRadius: "13px",
-                        overflow: "hidden",
-                        minWidth: "7%",
-                      }}
-                    >
-                      <img
-                        src={
-                          value.trang_thai === "1_normal"
-                            ? noterrorinsuTT
-                            : value.trang_thai === "2_defect_detected"
-                            ? warninsuTT
-                            : errorinsuTT
-                        }
-                        height={75}
-                        width={40}
-                      />
-                    </div>
-                  </>
-                ))
-              : ""}
-          </div>
-        </>
-      );
+      if (inneritem[classItem[1]])
+        return (
+          <>
+            <Typography variant="h5" component="h2">
+              {inneritem[classItem[1]] ? classItem[1] : ""}
+            </Typography>{" "}
+            <div
+              style={{
+                display: "flex",
+                overflow: "auto",
+                marginBottom: "2%",
+                marginTop: "2%",
+              }}
+            >
+              {inneritem[classItem[1]]
+                ? inneritem[classItem[1]].map((value, index) => (
+                    <>
+                      <div
+                        key={value.ma_thiet_bi}
+                        onClick={(e) => HandleClickDiv(value, classItem[1])}
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          marginLeft: "7%",
+                          border: "1px solid black",
+                          borderRadius: "13px",
+                          overflow: "hidden",
+                          minWidth: "7%",
+                        }}
+                      >
+                        <img
+                          src={
+                            value.trang_thai === "1_normal"
+                              ? noterrorinsuTT
+                              : value.trang_thai === "2_defect_detected"
+                              ? warninsuTT
+                              : errorinsuTT
+                          }
+                          height={75}
+                          width={40}
+                        />
+                      </div>
+                    </>
+                  ))
+                : ""}
+            </div>
+          </>
+        );
     }
   };
 
@@ -163,54 +163,54 @@ const MucDoLoi = () => {
     let item = findbykeyinarray(data, idthietbi);
     if (item) {
       let inneritem = item[Object.keys(item)[0]];
-
-      return (
-        <>
-          <Typography variant="h5" component="h2">
-            {inneritem[classItem[2]] ? classItem[2] : ""}
-          </Typography>
-          <div
-            style={{
-              display: "flex",
-              overflow: "auto",
-              marginBottom: "2%",
-              marginTop: "2%",
-            }}
-          >
-            {inneritem[classItem[2]]
-              ? inneritem[classItem[2]].map((value, index) => (
-                  <>
-                    <div
-                      key={value.ma_thiet_bi}
-                      onClick={(e) => HandleClickDiv(value, classItem[2])}
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginLeft: "7%",
-                        border: "1px solid black",
-                        borderRadius: "13px",
-                        overflow: "hidden",
-                        minWidth: "7%",
-                      }}
-                    >
-                      <img
-                        src={
-                          value.trang_thai === "1_normal"
-                            ? noterrorDZ
-                            : value.trang_thai === "2_defect_detected"
-                            ? warnDZ
-                            : errorDZ
-                        }
-                        height={75}
-                        width={40}
-                      />
-                    </div>
-                  </>
-                ))
-              : ""}
-          </div>
-        </>
-      );
+      if (inneritem[classItem[2]])
+        return (
+          <>
+            <Typography variant="h5" component="h2">
+              {inneritem[classItem[2]] ? classItem[2] : ""}
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                overflow: "auto",
+                marginBottom: "2%",
+                marginTop: "2%",
+              }}
+            >
+              {inneritem[classItem[2]]
+                ? inneritem[classItem[2]].map((value, index) => (
+                    <>
+                      <div
+                        key={value.ma_thiet_bi}
+                        onClick={(e) => HandleClickDiv(value, classItem[2])}
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          marginLeft: "7%",
+                          border: "1px solid black",
+                          borderRadius: "13px",
+                          overflow: "hidden",
+                          minWidth: "7%",
+                        }}
+                      >
+                        <img
+                          src={
+                            value.trang_thai === "1_normal"
+                              ? noterrorDZ
+                              : value.trang_thai === "2_defect_detected"
+                              ? warnDZ
+                              : errorDZ
+                          }
+                          height={75}
+                          width={40}
+                        />
+                      </div>
+                    </>
+                  ))
+                : ""}
+            </div>
+          </>
+        );
     }
   };
 

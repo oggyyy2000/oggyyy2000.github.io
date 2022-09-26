@@ -39,11 +39,12 @@ const Bieudothongke = (props) => {
 
   const MakeData = () => {
     let DataObj = {};
-    let ArrayAvg = [];
+    //let ArrayAvg = [];
+    let ArrayPercent = [];
     let labels = [];
     let backgroundColor = [];
     let data = anhthietbiloi?.data || [];
-    let MaxY = 0;
+    //let MaxY = 0;
     if (data) {
       for (let i = 0; i < data.length; i++) {
         let item = data[i];
@@ -68,9 +69,11 @@ const Bieudothongke = (props) => {
             }
           }
         }
-        let avg = sumerror !== 0 ? sumerror / len : len;
+        //let avg = sumerror !== 0 ? sumerror / len : len;
         if (len !== 0) {
-          ArrayAvg.push(avg.toFixed(2));
+          let percent = 100 - (sumerror / len) * 100;
+          ArrayPercent.push(percent);
+          //ArrayAvg.push(avg.toFixed(2));
 
           /*if (avg >= 1) {
             backgroundColor.push("rgb(0,255,0)");
@@ -78,22 +81,30 @@ const Bieudothongke = (props) => {
             backgroundColor.push("rgb(255,255,0)");
           } else backgroundColor.push("rgb(255,0,0)");*/
 
-          if (sumerror == 0) {
+          /*if (sumerror == 0) {
             backgroundColor.push("rgb(0,255,0)");
           } else if (sumerror < len / 3) {
+            backgroundColor.push("rgb(255,255,0)");
+          } else backgroundColor.push("rgb(255,0,0)");*/
+
+          if (percent == 100) {
+            backgroundColor.push("rgb(0,255,0)");
+          } else if (percent < 100 && percent >= 50) {
             backgroundColor.push("rgb(255,255,0)");
           } else backgroundColor.push("rgb(255,0,0)");
 
           labels.push(Object.keys(item)[0]);
-          MaxY = MaxY < len ? len : MaxY;
+          //MaxY = MaxY < len ? len : MaxY;
         }
       }
     }
 
-    DataObj["Avg"] = ArrayAvg;
+    //DataObj["Avg"] = ArrayAvg;
+    DataObj["ArrayPercent"] = ArrayPercent;
     DataObj["backgroundColor"] = backgroundColor;
     DataObj["labels"] = labels;
-    DataObj["MaxY"] = MaxY;
+    //DataObj["MaxY"] = MaxY;
+    DataObj["MaxX"] = labels?.length || 0;
 
     return DataObj;
   };
@@ -103,7 +114,7 @@ const Bieudothongke = (props) => {
     datasets: [
       {
         backgroundColor: datamyChart.backgroundColor,
-        data: datamyChart.Avg,
+        data: /*datamyChart.Avg*/ datamyChart.ArrayPercent,
       },
     ],
     labels: datamyChart.labels,
@@ -129,7 +140,7 @@ const Bieudothongke = (props) => {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
-            max: 7,
+            max: datamyChart?.MaxX || 10,
           },
           barThickness: 24,
           maxBarThickness: 30,
@@ -147,7 +158,7 @@ const Bieudothongke = (props) => {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
-            max: datamyChart?.MaxY || 5,
+            max: /*datamyChart?.MaxY || 5*/ 100,
           },
           gridLines: {
             borderDash: [3],
