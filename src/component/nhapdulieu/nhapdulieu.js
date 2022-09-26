@@ -291,7 +291,7 @@ export default function DotBay() {
 
   const GetListVideo = (id) => {
     async function getDataListImg(id) {
-      let urlg = urllistvideo + id;
+      let urlg = urllistvideo + "/" + id;
       try {
         let res = await axios({
           url: urlg,

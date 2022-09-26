@@ -305,7 +305,7 @@ function DataFetching() {
                       }}
                     >
                       <Card variant="outlined">
-                        <ul style={{ listStyleType: "none" }}>
+                        <ul style={{ listStyleType: "none", padding: 10 }}>
                           <li>
                             <strong>Mã thiết bị: </strong>
                             {dEtail?.ma_thiet_bi}
