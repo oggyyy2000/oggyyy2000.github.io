@@ -197,6 +197,7 @@ function DataFetching() {
                       justifyContent: "space-between",
                       flexWrap: "wrap",
                       marginBottom: 10,
+                      marginTop: 10,
                     }}
                   >
                     <FormControl
