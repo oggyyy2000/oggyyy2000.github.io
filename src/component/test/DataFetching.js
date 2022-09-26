@@ -150,6 +150,10 @@ function DataFetching() {
     }
   }, [idanh]);
 
+  useEffect(() => {
+    setGridSize({ panelone: 12, paneltwo: 0 });
+  }, [page]);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
@@ -261,14 +265,6 @@ function DataFetching() {
                       <li>
                         <strong>Loại thiết bị: </strong>
                         {dEtail?.loai_thiet_bi}
-                      </li>
-                      <li>
-                        <strong>Tên tuyến: </strong>
-                        {dEtail?.ten_tuyen}
-                      </li>
-                      <li>
-                        <strong>Tọa độ: </strong>
-                        {dEtail?.toa_do}
                       </li>
                       <li>
                         <strong>Ngày vận hành: </strong>
