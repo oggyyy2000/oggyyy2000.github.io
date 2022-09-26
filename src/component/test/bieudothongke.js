@@ -71,9 +71,15 @@ const Bieudothongke = (props) => {
         if (len !== 0) {
           ArrayAvg.push(avg.toFixed(2));
 
-          if (avg >= 1) {
+          /*if (avg >= 1) {
             backgroundColor.push("rgb(0,255,0)");
           } else if (avg >= 0.5) {
+            backgroundColor.push("rgb(255,255,0)");
+          } else backgroundColor.push("rgb(255,0,0)");*/
+
+          if (sumerror < len / 2) {
+            backgroundColor.push("rgb(0,255,0)");
+          } else if (sumerror < len / 3) {
             backgroundColor.push("rgb(255,255,0)");
           } else backgroundColor.push("rgb(255,0,0)");
 
