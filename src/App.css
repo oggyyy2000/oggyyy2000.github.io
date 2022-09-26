@@ -113,3 +113,16 @@
 .btnMap:focus {
   outline: none;
 }
+
+#canvas-container {
+  height: 60vh;
+  width: 60vw;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  #canvas-container {
+    height: auto;
+    width: auto;
+  }
+}

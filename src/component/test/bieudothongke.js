@@ -104,7 +104,7 @@ const Bieudothongke = (props) => {
     layout: { padding: 0 },
     legend: { display: false },
     maintainAspectRatio: false,
-    responsive: true,
+    //responsive: true,
     events: ["mousemove", "click"],
     onHover: (event, chartElement) => {
       event.target.style.cursor = chartElement[0] ? "pointer" : "default";
@@ -166,6 +166,7 @@ const Bieudothongke = (props) => {
           style={{
             height: 300,
           }}
+          id="canvas-container"
         >
           <Bar data={data} options={options} onElementsClick={ClickHandler} />
         </Box>
