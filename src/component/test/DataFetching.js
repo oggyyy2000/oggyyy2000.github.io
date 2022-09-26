@@ -31,6 +31,7 @@ import { ChangerUrl } from "../../util/ChangeUrl";
 import SlideshowGallery from "../generalObject/slideshow-gallery/SlideshowGallery2";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import IconButton from "@material-ui/core/IconButton";
+import { Resize, ResizeHorizon, ResizeVertical } from "react-resize-layout";
 
 const useStyles = makeStyles(() => ({
   pagination: {
@@ -172,196 +173,214 @@ function DataFetching() {
             margin: 0,
           }}
         >
-          <Grid
-            item
-            xs={gridSize.panelone || 12}
-            style={{ maxHeight: "100%", overflow: "scroll" }}
+          <Resize
+            handleWidth={gridSize.panelone == 12 ? "0px" : "10px"}
+            handleColor="#f1f1f1"
           >
-            <Grid container spacing={3}>
+            <ResizeHorizon width={gridSize.panelone == 12 ? "100%" : "59%"}>
               <Grid
                 item
-                xs={/*6*/ 12}
+                //xs={gridSize.panelone || 12}
+                xs={12}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  flexWrap: "wrap",
-                  marginBottom: 10,
+                  maxHeight: "100%",
+                  height: "100%",
+                  overflow: "scroll",
                 }}
               >
-                <FormControl
-                  variant="outlined"
-                  style={{
-                    alignSelf: "center",
-                    minWidth: "30%",
-                    marginLeft: 10,
-                  }}
-                >
-                  <InputLabel id="label-tuyen">Tuyến</InputLabel>
-                  <Select
-                    labelId="label-tuyen"
-                    id="labelt"
-                    value={Tuyen}
-                    onChange={handleChangeTuyen}
-                    label="T"
-                    defaultValue={""}
+                <Grid container spacing={3}>
+                  <Grid
+                    item
+                    xs={/*6*/ 12}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      flexWrap: "wrap",
+                      marginBottom: 10,
+                    }}
                   >
-                    {ListTuyen ? (
-                      ListTuyen.map((item, index) => (
-                        <MenuItem key={index} value={item.ma_tuyen}>
-                          {item.ten_tuyen}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <Loading />
-                    )}
-                  </Select>
-                </FormControl>
-                <div
-                  style={{
-                    /*marginTop: 10,*/ display: "inline-flex",
-                    height: "100%",
-                  }}
-                >
-                  <Pagination
-                    id="Pagination"
-                    className={classes.pagination}
-                    count={anhthietbiloi?.last_page || 0}
-                    size="large"
-                    page={page}
-                    color="primary"
-                    shape="rounded"
-                    onChange={handleChangePage}
-                  />
-                </div>
-              </Grid>
+                    <FormControl
+                      variant="outlined"
+                      style={{
+                        alignSelf: "center",
+                        minWidth: "30%",
+                        marginLeft: 10,
+                      }}
+                    >
+                      <InputLabel id="label-tuyen">Tuyến</InputLabel>
+                      <Select
+                        labelId="label-tuyen"
+                        id="labelt"
+                        value={Tuyen}
+                        onChange={handleChangeTuyen}
+                        label="T"
+                        defaultValue={""}
+                      >
+                        {ListTuyen ? (
+                          ListTuyen.map((item, index) => (
+                            <MenuItem key={index} value={item.ma_tuyen}>
+                              {item.ten_tuyen}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <Loading />
+                        )}
+                      </Select>
+                    </FormControl>
+                    <div
+                      style={{
+                        /*marginTop: 10,*/ display: "inline-flex",
+                        height: "100%",
+                      }}
+                    >
+                      <Pagination
+                        id="Pagination"
+                        className={classes.pagination}
+                        count={anhthietbiloi?.last_page || 0}
+                        size="large"
+                        page={page}
+                        color="primary"
+                        shape="rounded"
+                        onChange={handleChangePage}
+                      />
+                    </div>
+                  </Grid>
 
-              <Grid item xs={12}>
-                <Bieudothongke />
-              </Grid>
+                  <Grid item xs={12}>
+                    <Bieudothongke />
+                  </Grid>
 
-              <Grid item xs={12}>
-                <MucDoLoi />
+                  <Grid item xs={12}>
+                    <MucDoLoi />
+                  </Grid>
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
-
-          {gridSize.paneltwo == 5 && (
-            <Grid
-              item
-              xs={gridSize.paneltwo || 5}
-              style={{ maxHeight: "100%", overflow: "scroll" }}
-            >
-              <IconButton
-                style={{ float: "right" }}
-                component={"C"}
-                onClick={() => setGridSize({ panelone: 12, paneltwo: 0 })}
-              >
-                <ArrowBackIcon />
-              </IconButton>
-              <Grid container spacing={3}>
+            </ResizeHorizon>
+            <ResizeHorizon width={gridSize.paneltwo == 5 ? "41%" : "0%"}>
+              {gridSize.paneltwo == 5 && (
                 <Grid
                   item
+                  //xs={gridSize.paneltwo || 5}
                   xs={12}
-                  style={{
-                    overflow: "auto",
-                    maxWidth: "100%",
-                    //marginTop: "13%",
-                    marginTop: 10,
-                    maxHeight: "414px",
-                    variant: "outlined",
-                  }}
+                  style={{ maxHeight: "100%", overflow: "scroll" }}
                 >
-                  <Card variant="outlined">
-                    <ul style={{ listStyleType: "none" }}>
-                      <li>
-                        <strong>Mã thiết bị: </strong>
-                        {dEtail?.ma_thiet_bi}
-                      </li>
+                  <IconButton
+                    style={{ float: "right" }}
+                    component={"C"}
+                    onClick={() => setGridSize({ panelone: 12, paneltwo: 0 })}
+                  >
+                    <ArrowBackIcon />
+                  </IconButton>
+                  <Grid container spacing={3}>
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        overflow: "auto",
+                        maxWidth: "100%",
+                        //marginTop: "13%",
+                        marginTop: 10,
+                        maxHeight: "414px",
+                        variant: "outlined",
+                      }}
+                    >
+                      <Card variant="outlined">
+                        <ul style={{ listStyleType: "none" }}>
+                          <li>
+                            <strong>Mã thiết bị: </strong>
+                            {dEtail?.ma_thiet_bi}
+                          </li>
 
-                      <li>
-                        <strong>Loại thiết bị: </strong>
-                        {dEtail?.loai_thiet_bi}
-                      </li>
-                      <li>
-                        <strong>Ngày vận hành: </strong>
-                        {dEtail?.ngay_van_hanh}
-                      </li>
-                      <li>
-                        <strong>Ngày sửa đổi: </strong>
-                        {dEtail?.ngay_sua_doi}
-                      </li>
-                      <li>
-                        <strong>Ngày lắp đặt: </strong>
-                        {dEtail?.ngay_lap_dat}
-                      </li>
-                    </ul>
-                  </Card>
-                </Grid>
-                <Grid item xs={12} style={{ marginTop: "4%" }}>
-                  <Card variant="outlined" style={{ height: "100%" }}>
-                    <CardContent>
-                      <>
-                        <CardHeader
-                          title={`Ảnh thiết bị gốc ${
-                            dEtail ? dEtail?.loai_thiet_bi || "" : ""
-                          }`}
-                        />
-                        <div
-                          style={{
-                            display: "flex",
-                            overflow: "auto",
-                            marginBottom: "2%",
-                            marginTop: "2%",
-                            minHeight: "60%",
-                            minWidth: "60%",
-                          }}
-                        >
-                          {dEtail &&
-                            dEtail?.thong_tin_giam_sat_tb?.img_root_path && (
-                              <SlideshowGallery
-                                input={
-                                  dEtail?.thong_tin_giam_sat_tb?.img_root_path
-                                }
-                                ratio={`16:9`}
-                              />
-                            )}
-                        </div>
-                        <CardHeader title={"Ảnh thiết qua các đợt kiểm tra"} />
-
-                        {dEtail &&
-                          dEtail?.thong_tin_giam_sat_tb &&
-                          Object.keys(dEtail?.thong_tin_giam_sat_tb).map(
-                            (item, index) => (
-                              <>
-                                {item !== "img_root_path" && (
-                                  <>
-                                    {dEtail &&
+                          <li>
+                            <strong>Loại thiết bị: </strong>
+                            {dEtail?.loai_thiet_bi}
+                          </li>
+                          <li>
+                            <strong>Ngày vận hành: </strong>
+                            {dEtail?.ngay_van_hanh}
+                          </li>
+                          <li>
+                            <strong>Ngày sửa đổi: </strong>
+                            {dEtail?.ngay_sua_doi}
+                          </li>
+                          <li>
+                            <strong>Ngày lắp đặt: </strong>
+                            {dEtail?.ngay_lap_dat}
+                          </li>
+                        </ul>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={12} style={{ marginTop: "4%" }}>
+                      <Card variant="outlined" style={{ height: "100%" }}>
+                        <CardContent>
+                          <>
+                            <CardHeader
+                              title={`Ảnh thiết bị gốc ${
+                                dEtail ? dEtail?.loai_thiet_bi || "" : ""
+                              }`}
+                            />
+                            <div
+                              style={{
+                                display: "flex",
+                                overflow: "auto",
+                                marginBottom: "2%",
+                                marginTop: "2%",
+                                minHeight: "60%",
+                                minWidth: "60%",
+                              }}
+                            >
+                              {dEtail &&
+                                dEtail?.thong_tin_giam_sat_tb
+                                  ?.img_root_path && (
+                                  <SlideshowGallery
+                                    input={
                                       dEtail?.thong_tin_giam_sat_tb
-                                        ?.img_root_path && (
-                                        <>
-                                          <p>{item}</p>
-                                          <SlideshowGallery
-                                            input={
-                                              dEtail?.thong_tin_giam_sat_tb[
-                                                item
-                                              ]
-                                            }
-                                            ratio={`16:9`}
-                                          />
-                                        </>
-                                      )}
-                                  </>
+                                        ?.img_root_path
+                                    }
+                                    ratio={`16:9`}
+                                  />
                                 )}
-                              </>
-                            )
-                          )}
-                      </>
-                    </CardContent>
-                  </Card>
+                            </div>
+                            <CardHeader
+                              title={"Ảnh thiết qua các đợt kiểm tra"}
+                            />
+
+                            {dEtail &&
+                              dEtail?.thong_tin_giam_sat_tb &&
+                              Object.keys(dEtail?.thong_tin_giam_sat_tb).map(
+                                (item, index) => (
+                                  <>
+                                    {item !== "img_root_path" && (
+                                      <>
+                                        {dEtail &&
+                                          dEtail?.thong_tin_giam_sat_tb
+                                            ?.img_root_path && (
+                                            <>
+                                              <p>{item}</p>
+                                              <SlideshowGallery
+                                                input={
+                                                  dEtail?.thong_tin_giam_sat_tb[
+                                                    item
+                                                  ]
+                                                }
+                                                ratio={`16:9`}
+                                              />
+                                            </>
+                                          )}
+                                      </>
+                                    )}
+                                  </>
+                                )
+                              )}
+                          </>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          )}
+              )}
+            </ResizeHorizon>
+          </Resize>
         </Grid>
       </>
     </ThemeProvider>
