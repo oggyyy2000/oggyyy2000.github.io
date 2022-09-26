@@ -34,6 +34,23 @@ import IconButton from "@material-ui/core/IconButton";
 import { Resize, ResizeHorizon, ResizeVertical } from "react-resize-layout";
 
 const useStyles = makeStyles(() => ({
+  root: {
+    "&::-webkit-scrollbar": {
+      width: 20,
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "transparent",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#1976d2",
+      borderRadius: 20,
+      border: "6px solid transparent",
+      backgroundClip: "content-box",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: "rgb(17, 82, 147)",
+    },
+  },
   pagination: {
     display: "flex",
     alignItems: "center",
@@ -179,6 +196,7 @@ function DataFetching() {
           >
             <ResizeHorizon width={gridSize.panelone == 12 ? "100%" : "59%"}>
               <Grid
+                className={classes.root}
                 item
                 //xs={gridSize.panelone || 12}
                 xs={12}
@@ -260,6 +278,7 @@ function DataFetching() {
             <ResizeHorizon width={gridSize.paneltwo == 5 ? "41%" : "0%"}>
               {gridSize.paneltwo == 5 && (
                 <Grid
+                  className={classes.root}
                   item
                   //xs={gridSize.paneltwo || 5}
                   xs={12}
