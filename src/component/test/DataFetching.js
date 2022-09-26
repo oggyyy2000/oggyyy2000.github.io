@@ -179,7 +179,12 @@ function DataFetching() {
               <Grid
                 item
                 xs={/*6*/ 12}
-                style={{ display: "flex", justifyContent: "space-between" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  marginBottom: 10,
+                }}
               >
                 <FormControl
                   variant="outlined"
