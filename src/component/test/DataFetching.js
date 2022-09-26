@@ -32,6 +32,7 @@ import SlideshowGallery from "../generalObject/slideshow-gallery/SlideshowGaller
 
 const useStyles = makeStyles(() => ({
   pagination: {
+    display: "flex",
     alignItems: "center",
     justify: "center",
     "& > *": {
@@ -171,7 +172,11 @@ function DataFetching() {
             style={{ maxHeight: "100%", overflow: "scroll" }}
           >
             <Grid container spacing={3}>
-              <Grid item xs={6}>
+              <Grid
+                item
+                xs={/*6*/ 12}
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
                 <FormControl
                   variant="outlined"
                   style={{
@@ -200,7 +205,12 @@ function DataFetching() {
                     )}
                   </Select>
                 </FormControl>
-                <div style={{ marginTop: 10 }}>
+                <div
+                  style={{
+                    /*marginTop: 10,*/ display: "inline-flex",
+                    height: "100%",
+                  }}
+                >
                   <Pagination
                     className={classes.pagination}
                     count={anhthietbiloi?.last_page || 0}
