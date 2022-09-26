@@ -43,6 +43,7 @@ const Bieudothongke = (props) => {
     let labels = [];
     let backgroundColor = [];
     let data = anhthietbiloi?.data || [];
+    let MaxY = 0;
     if (data) {
       for (let i = 0; i < data.length; i++) {
         let item = data[i];
@@ -84,6 +85,7 @@ const Bieudothongke = (props) => {
           } else backgroundColor.push("rgb(255,0,0)");
 
           labels.push(Object.keys(item)[0]);
+          MaxY = MaxY < len ? len : MaxY;
         }
       }
     }
@@ -91,6 +93,7 @@ const Bieudothongke = (props) => {
     DataObj["Avg"] = ArrayAvg;
     DataObj["backgroundColor"] = backgroundColor;
     DataObj["labels"] = labels;
+    DataObj["MaxY"] = MaxY;
 
     return DataObj;
   };
@@ -144,7 +147,7 @@ const Bieudothongke = (props) => {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
             min: 0,
-            max: 5,
+            max: datamyChart?.MaxY || 5,
           },
           gridLines: {
             borderDash: [3],
