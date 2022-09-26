@@ -251,6 +251,7 @@ function DataFetching() {
               style={{ maxHeight: "100%", overflow: "scroll" }}
             >
               <IconButton
+                style={{ float: "right" }}
                 component={"C"}
                 onClick={() => setGridSize({ panelone: 12, paneltwo: 0 })}
               >
