@@ -30,6 +30,10 @@ const Bieudothongke = (props) => {
       const value =
         data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
       dispatch({ type: actions.idthietbi, data: label });
+      dispatch({
+        type: actions.idanh,
+        data: {},
+      });
     }
   }
 

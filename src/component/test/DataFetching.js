@@ -54,6 +54,7 @@ function DataFetching() {
   const [dEtail, setdEtail] = useState({});
   const [page, setPage] = useState(1);
   const urlt = process.env.REACT_APP_API_URL + "getalltuyens";
+  const [gridSize, setGridSize] = useState({ panelone: 12, paneltwo: 0 });
   const urltttbgs = `${
     process.env.REACT_APP_API_URL
   }getallttgiamsatthietbis?page=${page}${
@@ -139,6 +140,11 @@ function DataFetching() {
           (x) => x.ma_thiet_bi === idanh.ma_thiet_bi
         );
         setdEtail(item);
+        if (item) {
+          setGridSize({ panelone: 7, paneltwo: 5 });
+        } else {
+          setGridSize({ panelone: 12, paneltwo: 0 });
+        }
       }
     }
   }, [idanh]);
@@ -159,7 +165,11 @@ function DataFetching() {
             margin: 0,
           }}
         >
-          <Grid item xs={7} style={{ maxHeight: "100%", overflow: "scroll" }}>
+          <Grid
+            item
+            xs={gridSize.panelone || 12}
+            style={{ maxHeight: "100%", overflow: "scroll" }}
+          >
             <Grid container spacing={3}>
               <Grid item xs={6}>
                 <FormControl
@@ -213,192 +223,123 @@ function DataFetching() {
             </Grid>
           </Grid>
 
-          <Grid item xs={5} style={{ maxHeight: "100%", overflow: "scroll" }}>
-            <Grid container spacing={3}>
-              <Grid
-                item
-                xs={12}
-                style={{
-                  overflow: "auto",
-                  maxWidth: "100%",
-                  marginTop: "13%",
-                  maxHeight: "414px",
-                  variant: "outlined",
-                }}
-              >
-                <Card variant="outlined">
-                  <ul style={{ listStyleType: "none" }}>
-                    <li>
-                      <strong>Mã thiết bị: </strong>
-                      {dEtail?.ma_thiet_bi}
-                    </li>
+          {gridSize.paneltwo == 5 && (
+            <Grid
+              item
+              xs={gridSize.paneltwo || 5}
+              style={{ maxHeight: "100%", overflow: "scroll" }}
+            >
+              <Grid container spacing={3}>
+                <Grid
+                  item
+                  xs={12}
+                  style={{
+                    overflow: "auto",
+                    maxWidth: "100%",
+                    marginTop: "13%",
+                    maxHeight: "414px",
+                    variant: "outlined",
+                  }}
+                >
+                  <Card variant="outlined">
+                    <ul style={{ listStyleType: "none" }}>
+                      <li>
+                        <strong>Mã thiết bị: </strong>
+                        {dEtail?.ma_thiet_bi}
+                      </li>
 
-                    <li>
-                      <strong>Loại thiết bị: </strong>
-                      {dEtail?.loai_thiet_bi}
-                    </li>
-                    <li>
-                      <strong>Tên tuyến: </strong>
-                      {dEtail?.ten_tuyen}
-                    </li>
-                    <li>
-                      <strong>Tọa độ: </strong>
-                      {dEtail?.toa_do}
-                    </li>
-                    <li>
-                      <strong>Ngày vận hành: </strong>
-                      {dEtail?.ngay_van_hanh}
-                    </li>
-                    <li>
-                      <strong>Ngày sửa đổi: </strong>
-                      {dEtail?.ngay_sua_doi}
-                    </li>
-                    <li>
-                      <strong>Ngày lắp đặt: </strong>
-                      {dEtail?.ngay_lap_dat}
-                    </li>
-                  </ul>
-                </Card>
-              </Grid>
-              <Grid item xs={12} style={{ marginTop: "4%" }}>
-                <Card variant="outlined" style={{ height: "100%" }}>
-                  <CardContent>
-                    <>
-                      <CardHeader
-                        title={`Ảnh thiết bị gốc ${
-                          dEtail ? dEtail?.loai_thiet_bi || "" : ""
-                        }`}
-                      />
-                      <div
-                        style={{
-                          display: "flex",
-                          overflow: "auto",
-                          marginBottom: "2%",
-                          marginTop: "2%",
-                          minHeight: "60%",
-                          minWidth: "60%",
-                        }}
-                      >
+                      <li>
+                        <strong>Loại thiết bị: </strong>
+                        {dEtail?.loai_thiet_bi}
+                      </li>
+                      <li>
+                        <strong>Tên tuyến: </strong>
+                        {dEtail?.ten_tuyen}
+                      </li>
+                      <li>
+                        <strong>Tọa độ: </strong>
+                        {dEtail?.toa_do}
+                      </li>
+                      <li>
+                        <strong>Ngày vận hành: </strong>
+                        {dEtail?.ngay_van_hanh}
+                      </li>
+                      <li>
+                        <strong>Ngày sửa đổi: </strong>
+                        {dEtail?.ngay_sua_doi}
+                      </li>
+                      <li>
+                        <strong>Ngày lắp đặt: </strong>
+                        {dEtail?.ngay_lap_dat}
+                      </li>
+                    </ul>
+                  </Card>
+                </Grid>
+                <Grid item xs={12} style={{ marginTop: "4%" }}>
+                  <Card variant="outlined" style={{ height: "100%" }}>
+                    <CardContent>
+                      <>
+                        <CardHeader
+                          title={`Ảnh thiết bị gốc ${
+                            dEtail ? dEtail?.loai_thiet_bi || "" : ""
+                          }`}
+                        />
+                        <div
+                          style={{
+                            display: "flex",
+                            overflow: "auto",
+                            marginBottom: "2%",
+                            marginTop: "2%",
+                            minHeight: "60%",
+                            minWidth: "60%",
+                          }}
+                        >
+                          {dEtail &&
+                            dEtail?.thong_tin_giam_sat_tb?.img_root_path && (
+                              <SlideshowGallery
+                                input={
+                                  dEtail?.thong_tin_giam_sat_tb?.img_root_path
+                                }
+                                ratio={`16:9`}
+                              />
+                            )}
+                        </div>
+                        <CardHeader title={"Ảnh thiết qua các đợt kiểm tra"} />
+
                         {dEtail &&
-                          dEtail?.thong_tin_giam_sat_tb?.img_root_path && (
-                            <SlideshowGallery
-                              input={
-                                dEtail?.thong_tin_giam_sat_tb?.img_root_path
-                              }
-                              ratio={`16:9`}
-                            />
-                          )}
-                        {/*dEtail &&
-                          dEtail?.thong_tin_giam_sat_tb?.img_root_path.map(
+                          dEtail?.thong_tin_giam_sat_tb &&
+                          Object.keys(dEtail?.thong_tin_giam_sat_tb).map(
                             (item, index) => (
-                              <div
-                                key={index}
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  marginLeft: "7%",
-                                  border: "1px solid black",
-                                  borderRadius: "13px",
-                                  overflow: "hidden",
-                                  minWidth: "50%",
-                                }}
-                              >
-                                <TransformWrapper
-                                  defaultScale={1}
-                                  defaultPositionX={100}
-                                  defaultPositionY={200}
-                                >
-                                  <TransformComponent>
-                                    <img
-                                      src={ChangerUrl(item)}
-                                      height={"100%"}
-                                      width={"100%"}
-                                    />
-                                  </TransformComponent>
-                                </TransformWrapper>
-                              </div>
-                            )
-                              )*/}
-                      </div>
-                      <CardHeader title={"Ảnh thiết qua các đợt kiểm tra"} />
-
-                      {dEtail &&
-                        dEtail?.thong_tin_giam_sat_tb &&
-                        Object.keys(dEtail?.thong_tin_giam_sat_tb).map(
-                          (item, index) => (
-                            <>
-                              {item !== "img_root_path" && (
-                                <>
-                                  {dEtail &&
-                                    dEtail?.thong_tin_giam_sat_tb
-                                      ?.img_root_path && (
-                                      <>
-                                        <p>{item}</p>
-                                        <SlideshowGallery
-                                          input={
-                                            dEtail?.thong_tin_giam_sat_tb[item]
-                                          }
-                                          ratio={`16:9`}
-                                        />
-                                      </>
-                                    )}
-                                  {/*<div
-                                    key={index}
-                                    style={{
-                                      display: "flex",
-                                      overflow: "auto",
-                                      marginBottom: "2%",
-                                      marginTop: "2%",
-                                      minHeight: "60%",
-                                      minWidth: "60%",
-                                    }}
-                                  >
-                                    {item}
-
-                                    {dEtail?.thong_tin_giam_sat_tb[item].map(
-                                      (item, index) => (
+                              <>
+                                {item !== "img_root_path" && (
+                                  <>
+                                    {dEtail &&
+                                      dEtail?.thong_tin_giam_sat_tb
+                                        ?.img_root_path && (
                                         <>
-                                          <div
-                                            key={index}
-                                            style={{
-                                              display: "flex",
-                                              justifyContent: "center",
-                                              marginLeft: "7%",
-                                              border: "1px solid black",
-                                              borderRadius: "13px",
-                                              overflow: "hidden",
-                                              minWidth: "50%",
-                                            }}
-                                          >
-                                            <TransformWrapper
-                                              defaultScale={1}
-                                              defaultPositionX={100}
-                                              defaultPositionY={200}
-                                            >
-                                              <TransformComponent>
-                                                <img
-                                                  src={ChangerUrl(item)}
-                                                  height={"100%"}
-                                                  width={"100%"}
-                                                />
-                                              </TransformComponent>
-                                            </TransformWrapper>
-                                          </div>
+                                          <p>{item}</p>
+                                          <SlideshowGallery
+                                            input={
+                                              dEtail?.thong_tin_giam_sat_tb[
+                                                item
+                                              ]
+                                            }
+                                            ratio={`16:9`}
+                                          />
                                         </>
-                                      )
-                                    )}
-                                          </div>*/}
-                                </>
-                              )}
-                            </>
-                          )
-                        )}
-                    </>
-                  </CardContent>
-                </Card>
+                                      )}
+                                  </>
+                                )}
+                              </>
+                            )
+                          )}
+                      </>
+                    </CardContent>
+                  </Card>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          )}
         </Grid>
       </>
     </ThemeProvider>

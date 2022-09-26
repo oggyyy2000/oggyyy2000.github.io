@@ -105,6 +105,10 @@ const ChartView = (props) => {
       const value =
         myChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
       dispatch({ type: actions.idthietbi, data: label });
+      dispatch({
+        type: actions.idanh,
+        data: {},
+      });
     }
   }
 
@@ -120,4 +124,3 @@ const ChartView = (props) => {
 };
 
 export default ChartView;
-
