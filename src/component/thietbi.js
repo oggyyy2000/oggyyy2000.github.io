@@ -493,6 +493,7 @@ export default function ThietBi() {
             </FormControl>
             <div style={{ marginTop: 10 }}>
               <Pagination
+                id="Pagination"
                 className={classes.pagination}
                 count={fetchedData?.last_page || 0}
                 size="large"

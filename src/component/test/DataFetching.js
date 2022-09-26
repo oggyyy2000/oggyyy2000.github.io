@@ -223,6 +223,7 @@ function DataFetching() {
                   }}
                 >
                   <Pagination
+                    id="Pagination"
                     className={classes.pagination}
                     count={anhthietbiloi?.last_page || 0}
                     size="large"
