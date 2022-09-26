@@ -77,7 +77,7 @@ const Bieudothongke = (props) => {
             backgroundColor.push("rgb(255,255,0)");
           } else backgroundColor.push("rgb(255,0,0)");*/
 
-          if (sumerror < len / 2) {
+          if (sumerror == 0) {
             backgroundColor.push("rgb(0,255,0)");
           } else if (sumerror < len / 3) {
             backgroundColor.push("rgb(255,255,0)");
