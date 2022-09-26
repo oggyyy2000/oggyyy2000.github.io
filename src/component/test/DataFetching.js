@@ -29,6 +29,8 @@ import { Pagination } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { ChangerUrl } from "../../util/ChangeUrl";
 import SlideshowGallery from "../generalObject/slideshow-gallery/SlideshowGallery2";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(() => ({
   pagination: {
@@ -248,6 +250,12 @@ function DataFetching() {
               xs={gridSize.paneltwo || 5}
               style={{ maxHeight: "100%", overflow: "scroll" }}
             >
+              <IconButton
+                component={"C"}
+                onClick={() => setGridSize({ panelone: 12, paneltwo: 0 })}
+              >
+                <ArrowBackIcon />
+              </IconButton>
               <Grid container spacing={3}>
                 <Grid
                   item
@@ -255,7 +263,8 @@ function DataFetching() {
                   style={{
                     overflow: "auto",
                     maxWidth: "100%",
-                    marginTop: "13%",
+                    //marginTop: "13%",
+                    marginTop: 10,
                     maxHeight: "414px",
                     variant: "outlined",
                   }}
