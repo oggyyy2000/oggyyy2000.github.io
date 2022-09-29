@@ -397,11 +397,27 @@ export default function DialogSavePopup(props) {
         reject(error);
       };
     });
+    return file;
   };
 
+  function readFileAsync(file) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
   async function onChangeHandler(event) {
-    var file = await convertBase64(event.target.files[0]);
-    //console.log(file);
+    //var file = await readFileAsync(event.target.files[0]);
+    var file = event.target.files[0];
+    console.log(file);
     if (file) SetSelectedFile(file);
     //alert("video ok");
   }
@@ -438,7 +454,7 @@ export default function DialogSavePopup(props) {
     for (let i = 0; i < file.length; i++) {
       if (isImage(file[i])) {
         if (file[i]) {
-          const base64 = await convertBase64(file[i]);
+          const base64 = await readFileAsync(file[i]);
           temp.push(base64.split("base64,")[1]);
           tempname.push(
             `${i}_${file[i].name
@@ -467,8 +483,9 @@ export default function DialogSavePopup(props) {
   }
 
   async function onChangeHandlerSRT(event) {
-    var file = await convertBase64(event.target.files[0]);
-    //console.log(file);
+    //var file = await readFileAsync(event.target.files[0]);
+    var file = event.target.files[0];
+    console.log(file);
     if (file) setSrt(file);
     //alert("srt ok");
   }
@@ -496,8 +513,8 @@ export default function DialogSavePopup(props) {
     ws.current.send(
       JSON.stringify({
         ma_dot_kiem_tra: madkt,
-        video_data: selectedFile,
-        gis_data: Srt,
+        //video_data: selectedFile,
+        //gis_data: Srt,
       })
     );
     dispatch({
@@ -524,7 +541,7 @@ export default function DialogSavePopup(props) {
     ws.current.send(
       JSON.stringify({
         ma_dot_kiem_tra: madkt,
-        multi_images_data: selectedFile,
+        //multi_images_data: selectedFile,
       })
     );
     dispatch({
@@ -558,26 +575,54 @@ export default function DialogSavePopup(props) {
         ? sendvideo(ThisDot)
         : sendIMG(Dot);
     } else {
-      axios
+      const formData = new FormData();
+      /*
+       ma_tuyen: Tuyen,
+          bat_dau_doan: batdau,
+          ket_thuc_doan: ketthuc,
+          ngay_kiem_tra: formatDate(DateDB),
+          hinh_thuc_kiem_tra: "ngay",
+          type: !SelectIMG ? "video" : "img",
+          file: selectedFile,
+          srt: Srt,
+          */
+      formData.append("ma_tuyen", Tuyen);
+      formData.append("bat_dau_doan", batdau);
+      formData.append("ket_thuc_doan", ketthuc);
+      formData.append("ngay_kiem_tra", formatDate(DateDB));
+      formData.append("hinh_thuc_kiem_tra", "ngay");
+      formData.append("type", !SelectIMG ? "video" : "img");
+      formData.append("file", selectedFile);
+      formData.append("srt", Srt);
+      /*axios
         .post(urltdkt, {
           ma_tuyen: Tuyen,
           bat_dau_doan: batdau,
           ket_thuc_doan: ketthuc,
           ngay_kiem_tra: formatDate(DateDB),
           hinh_thuc_kiem_tra: "ngay",
-        })
-        .then(
-          (response) => {
-            props.reload();
-            setThisDot(response.data.ma_dot_kiem_tra);
-            !SelectIMG
-              ? sendvideo(response.data.ma_dot_kiem_tra)
-              : sendIMG(response.data.ma_dot_kiem_tra);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+          type: !SelectIMG ? "video" : "img",
+          file: selectedFile,
+          srt: Srt,
+        })*/
+      axios({
+        method: "post",
+        url: urltdkt,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      }).then(
+        (response) => {
+          props.reload();
+          alert("sended video");
+          /*setThisDot(response.data.ma_dot_kiem_tra);
+          !SelectIMG
+            ? sendvideo(response.data.ma_dot_kiem_tra)
+            : sendIMG(response.data.ma_dot_kiem_tra);*/
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
   };
 

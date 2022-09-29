@@ -16,6 +16,7 @@ import ImportExportIcon from "@material-ui/icons/ImportExport";
 import SaveIcon from "@material-ui/icons/Save";
 //-----------------------------------------
 // data
+/*
 import { T1 } from "../../util/toado/T1";
 import { T2 } from "../../util/toado/T2";
 import { T3 } from "../../util/toado/T3";
@@ -23,12 +24,13 @@ import { T4 } from "../../util/toado/T4";
 import { T5 } from "../../util/toado/T5";
 import { T6 } from "../../util/toado/T6";
 import { T7 } from "../../util/toado/T7";
-import { T8 } from "../../util/toado/T8";
+import { T8 } from "../../util/toado/T8";*/
 ///////////////////////////////////////////
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../redux/types";
 import { WSContext } from "../main/contexts/WSContext";
 import { getTextDisplay } from "../../util/GetTenTuyen";
+import axios from "axios";
 
 const styles = (theme) => ({
   root: {
@@ -100,6 +102,9 @@ export default function DialogSavePopup2(props) {
   const [Srt, setSrt] = useState(null);
   const [ListCot, setListCot] = useState([]);
   const dispatch = useDispatch();
+  const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
+    props?.ma_tuyen ? "&ma_tuyen=" + props?.ma_tuyen : "&none=0"
+  }`;
 
   const classes = useStyles();
 
@@ -119,9 +124,29 @@ export default function DialogSavePopup2(props) {
     dispatch({ type: actions.ON_CURRENT_LIST_COT_CHANGE, data: [] });
   };
 
+  async function getDatavtt() {
+    try {
+      let res = await axios({
+        url: urlvt,
+        method: "get",
+        timeout: 8000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.status === 200) {
+        //  console.log(res.status);
+      }
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   const Change_List_Cot = (value) => {
     Resset_Cot();
-    switch (value) {
+    getDatavtt().then((res) => setListCot(res));
+    /*switch (value) {
       case "T1":
         setListCot(T1);
         break;
@@ -149,7 +174,7 @@ export default function DialogSavePopup2(props) {
       default:
         setListCot(T1);
         break;
-    }
+    }*/
   };
 
   useEffect(() => {
@@ -244,6 +269,20 @@ export default function DialogSavePopup2(props) {
     });
   };
 
+  function readFileAsync(file) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
   function getExtension(filename) {
     var parts = filename.split(".");
     return parts[parts.length - 1];
@@ -306,15 +345,18 @@ export default function DialogSavePopup2(props) {
 
   async function onChangeHandler(event) {
     var file = await convertBase64(event.target.files[0]);
-    //console.log(file);
-    if (file) SetSelectedFile(file);
+    //if (file) {
+    console.log(file);
+    SetSelectedFile(file);
+    //}
     // alert("video ok");
   }
 
   async function onChangeHandlerSRT(event) {
     var file = await convertBase64(event.target.files[0]);
-    //console.log(file);
-    if (file) setSrt(file);
+    console.log(file);
+    //if (file)
+    setSrt(file);
     //alert("srt ok");
   }
 
