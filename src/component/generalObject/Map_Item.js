@@ -41,7 +41,7 @@ import axios from "axios";
 import { ImageTwoTone } from "@material-ui/icons";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
-const API_KEY = "AIzaSyAxTvKumZ34dP0Qf_veNQoliDMC5GgrblM";
+const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
 const link =
   "https://maps.googleapis.com/maps/api/js?key=" +
@@ -50,8 +50,8 @@ const link =
 
 const Map_Item = () => {
   // State
-  const [center, setCenter] = useState({ lat: 21, lng: 105 });
-  const [zoomsize, setZoomsize] = useState(8);
+  const [center, setCenter] = useState({ lat: 21.0286436, lng: 105.855725 });
+  const [zoomsize, setZoomsize] = useState(10);
   const [pathPoint, SetPathPoint] = useState([]);
   const [LinePoint, SetLinePoint] = useState([]);
   const [TD, setTD] = useState({});

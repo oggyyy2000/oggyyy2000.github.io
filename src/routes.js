@@ -7,6 +7,7 @@ import Home from "./component/home/Home";
 import TestPage from "./component/TestPage";
 import Page404 from "./component/Page404";
 import ThietBi from "./component/thietbi";
+import ThietBi2 from "./component/thietbi2";
 import HomeDB from "./component/dotbay/HomeDB";
 import HomeDL from "./component/nhapdulieu/HomeDL";
 import PhotoMS from "./component/photoms/photoms";
@@ -33,7 +34,8 @@ const routes = [
       { path: "trangchu", element: <ProtectedRoute component={Home} /> },
       {
         path: "thietbi",
-        element: <ProtectedRoute component={ThietBi} />,
+        //element: <ProtectedRoute component={ThietBi} />,
+        element: <ProtectedRoute component={ThietBi2} />,
       },
       {
         path: "dotbay",
