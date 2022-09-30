@@ -104,6 +104,7 @@ export default function DialogSavePopup(props) {
   // const urlt = process.env.REACT_APP_API_URL + "tuyens/";
   // const urlv = process.env.REACT_APP_API_URL + "videoimports/";
   const urltdkt = process.env.REACT_APP_API_URL + "dotkiemtraimports";
+  const uploadvideo = process.env.REACT_APP_API_URL + "getvideodetectimport";
   const classes = useStyles();
   //const [ListTuyen, setListTuyen] = useState([]);
   //const [fetchedData, setFetchedData] = useState([]);
@@ -384,42 +385,9 @@ export default function DialogSavePopup(props) {
     dispatch({ type: actions.ON_CURRENT_TUYEN_CHANGE, data: Tuyen });
   };
 
-  const convertBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-    return file;
-  };
-
-  function readFileAsync(file) {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader();
-
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-
-      reader.onerror = reject;
-
-      reader.readAsArrayBuffer(file);
-    });
-  }
-
   async function onChangeHandler(event) {
-    //var file = await readFileAsync(event.target.files[0]);
     var file = event.target.files[0];
-    console.log(file);
     if (file) SetSelectedFile(file);
-    //alert("video ok");
   }
 
   function getExtension(filename) {
@@ -454,7 +422,7 @@ export default function DialogSavePopup(props) {
     for (let i = 0; i < file.length; i++) {
       if (isImage(file[i])) {
         if (file[i]) {
-          const base64 = await readFileAsync(file[i]);
+          const base64 = file[i];
           temp.push(base64.split("base64,")[1]);
           tempname.push(
             `${i}_${file[i].name
@@ -483,11 +451,8 @@ export default function DialogSavePopup(props) {
   }
 
   async function onChangeHandlerSRT(event) {
-    //var file = await readFileAsync(event.target.files[0]);
     var file = event.target.files[0];
-    console.log(file);
     if (file) setSrt(file);
-    //alert("srt ok");
   }
 
   function formatDate(date) {
@@ -508,57 +473,27 @@ export default function DialogSavePopup(props) {
     return cot[0];
   };
 
-  const sendvideo = (madkt) => {
+  const sendvideo = (madkt, dataArray) => {
     if (!ws.current) return;
-    ws.current.send(
-      JSON.stringify({
-        ma_dot_kiem_tra: madkt,
-        //video_data: selectedFile,
-        //gis_data: Srt,
-      })
-    );
-    dispatch({
-      type: actions.MODE_SHOW_VIDEO,
-      data: "LIVE",
+    const data = JSON.stringify({
+      ma_dot_kiem_tra: madkt,
+      video_data: dataArray[0],
+      gis_data: dataArray[1],
     });
-    dispatch({
-      type: actions.TYPE_WS_DATA,
-      data: "VIDEO",
-    });
-    dispatch({
-      type: actions.TUYEN_GS,
-      data: `${getTextDisplay(Tuyen)} ( 
-      ${BatDau.split("|")[0]}
-      -
-      ${KetThuc.split("|")[0]} )`,
-    });
+
     // handleClose();
     setOpen(false);
   };
 
-  const sendIMG = (madkt) => {
+  const sendIMG = (madkt, dataArray) => {
     if (!ws.current) return;
     ws.current.send(
       JSON.stringify({
         ma_dot_kiem_tra: madkt,
-        //multi_images_data: selectedFile,
+        multi_images_data: dataArray,
       })
     );
-    dispatch({
-      type: actions.MODE_SHOW_VIDEO,
-      data: "LIVE",
-    });
-    dispatch({
-      type: actions.TYPE_WS_DATA,
-      data: "IMG",
-    });
-    dispatch({
-      type: actions.TUYEN_GS,
-      data: `${getTextDisplay(Tuyen)} ( 
-    ${BatDau.split("|")[0]}
-    -
-    ${KetThuc.split("|")[0]} )`,
-    });
+
     // handleClose();
     setOpen(false);
   };
@@ -566,7 +501,25 @@ export default function DialogSavePopup(props) {
   const handelsubumit = async () => {
     let batdau = await getcot(BatDau);
     let ketthuc = await getcot(KetThuc);
-    if (ThisDot || Dot != null) {
+
+    dispatch({
+      type: actions.MODE_SHOW_VIDEO,
+      data: "LIVE",
+    });
+    dispatch({
+      type: actions.TYPE_WS_DATA,
+      data: !SelectIMG ? "VIDEO" : "IMG",
+    });
+
+    dispatch({
+      type: actions.TUYEN_GS,
+      data: `${getTextDisplay(Tuyen)} ( 
+        ${batdau}
+        -
+        ${ketthuc} )`,
+    });
+
+    /*if (ThisDot || Dot != null) {
       Dot
         ? !SelectIMG
           ? sendvideo(Dot)
@@ -574,56 +527,58 @@ export default function DialogSavePopup(props) {
         : !SelectIMG
         ? sendvideo(ThisDot)
         : sendIMG(Dot);
-    } else {
-      const formData = new FormData();
-      /*
-       ma_tuyen: Tuyen,
-          bat_dau_doan: batdau,
-          ket_thuc_doan: ketthuc,
-          ngay_kiem_tra: formatDate(DateDB),
-          hinh_thuc_kiem_tra: "ngay",
-          type: !SelectIMG ? "video" : "img",
-          file: selectedFile,
-          srt: Srt,
-          */
-      formData.append("ma_tuyen", Tuyen);
-      formData.append("bat_dau_doan", batdau);
-      formData.append("ket_thuc_doan", ketthuc);
-      formData.append("ngay_kiem_tra", formatDate(DateDB));
-      formData.append("hinh_thuc_kiem_tra", "ngay");
-      formData.append("type", !SelectIMG ? "video" : "img");
-      formData.append("file", selectedFile);
-      formData.append("srt", Srt);
-      /*axios
-        .post(urltdkt, {
-          ma_tuyen: Tuyen,
-          bat_dau_doan: batdau,
-          ket_thuc_doan: ketthuc,
-          ngay_kiem_tra: formatDate(DateDB),
-          hinh_thuc_kiem_tra: "ngay",
-          type: !SelectIMG ? "video" : "img",
-          file: selectedFile,
-          srt: Srt,
-        })*/
-      axios({
-        method: "post",
-        url: urltdkt,
-        data: formData,
-        headers: { "Content-Type": "multipart/form-data" },
-      }).then(
+    } else {*/
+    axios
+      .post(urltdkt, {
+        ma_tuyen: Tuyen,
+        bat_dau_doan: batdau,
+        ket_thuc_doan: ketthuc,
+        ngay_kiem_tra: formatDate(DateDB),
+        hinh_thuc_kiem_tra: "ngay",
+        type: !SelectIMG ? "video" : "img",
+        file: selectedFile,
+        srt: Srt,
+      })
+      .then(
         (response) => {
           props.reload();
-          alert("sended video");
-          /*setThisDot(response.data.ma_dot_kiem_tra);
-          !SelectIMG
-            ? sendvideo(response.data.ma_dot_kiem_tra)
-            : sendIMG(response.data.ma_dot_kiem_tra);*/
+          setThisDot(response.data.ma_dot_kiem_tra);
+          const ma_dot_kiem_tra = response.data.ma_dot_kiem_tra;
+          const formData = new FormData();
+          formData.append("ma_tuyen", Tuyen);
+          formData.append("bat_dau_doan", batdau);
+          formData.append("ket_thuc_doan", ketthuc);
+          formData.append("ngay_kiem_tra", formatDate(DateDB));
+          formData.append("type", !SelectIMG ? "video" : "img");
+          if (!SelectIMG) {
+            formData.append("video", selectedFile);
+            formData.append("srt", Srt);
+          } else {
+            formData.append("multi_images", selectedFile);
+          }
+          axios({
+            method: "post",
+            url: `${uploadvideo}/${ma_dot_kiem_tra}`,
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+          }).then(
+            (response) => {
+              props.reload();
+
+              !SelectIMG
+                ? sendvideo(ma_dot_kiem_tra, response?.data)
+                : sendIMG(ma_dot_kiem_tra, response?.data);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
         },
         (error) => {
           console.log(error);
         }
       );
-    }
+    // }
   };
 
   const renderchoice = () => {

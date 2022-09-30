@@ -160,14 +160,6 @@ const VideoWS = () => {
           />
         ) : (
           <>
-            {/* <img
-              src={"data:image/jpeg;base64," + MainIMG}
-              style={{
-                width: "100%",
-                objectFit: "cover",
-              }}
-            /> 
-            <DialogImageShow />*/}
             <SlideshowGallery
               input={Lists}
               // ratio={`3:2`}

@@ -105,6 +105,7 @@ export default function DialogSavePopup2(props) {
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
     props?.ma_tuyen ? "&ma_tuyen=" + props?.ma_tuyen : "&none=0"
   }`;
+  const uploadvideo = process.env.REACT_APP_API_URL + "getvideodetectimport";
 
   const classes = useStyles();
 
@@ -315,7 +316,8 @@ export default function DialogSavePopup2(props) {
     for (let i = 0; i < file.length; i++) {
       if (isImage(file[i])) {
         if (file[i]) {
-          const base64 = await convertBase64(file[i]);
+          //const base64 = await convertBase64(file[i]);
+          const base64 = file[i];
           temp.push(base64.split("base64,")[1]);
           tempname.push(
             `${i}_${file[i].name
@@ -344,67 +346,54 @@ export default function DialogSavePopup2(props) {
   }
 
   async function onChangeHandler(event) {
-    var file = await convertBase64(event.target.files[0]);
-    //if (file) {
-    console.log(file);
-    SetSelectedFile(file);
-    //}
-    // alert("video ok");
+    //var file = await convertBase64(event.target.files[0]);
+    var file = await event.target.files[0];
+    if (file) SetSelectedFile(file);
   }
 
   async function onChangeHandlerSRT(event) {
-    var file = await convertBase64(event.target.files[0]);
-    console.log(file);
-    //if (file)
-    setSrt(file);
-    //alert("srt ok");
+    //var file = await convertBase64(event.target.files[0]);
+    var file = event.target.files[0];
+    if (file) setSrt(file);
   }
 
-  const sendvideo = (madkt) => {
+  const sendvideo = (madkt, dataArray) => {
     if (!ws.current) return;
-    ws.current.send(
-      JSON.stringify({
-        ma_dot_kiem_tra: madkt,
-        video_data: selectedFile,
-        gis_data: Srt,
-      })
-    );
-    dispatch({
-      type: actions.MODE_SHOW_VIDEO,
-      data: "LIVE",
+    const data = JSON.stringify({
+      ma_dot_kiem_tra: madkt,
+      video_data: dataArray[0],
+      gis_data: dataArray[1],
     });
+    //console.log(data);
+    ws.current.send(data);
 
-    dispatch({
-      type: actions.TYPE_WS_DATA,
-      data: "VIDEO",
-    });
-    dispatch({
-      type: actions.TUYEN_GS,
-      data: `${getTextDisplay(post.ma_tuyen)} ( 
-      ${post.bat_dau_doan}
-      -
-      ${post.ket_thuc_doan} )`,
-    });
     //handleClose();
     setOpen(false);
   };
 
-  const sendIMG = (madkt) => {
+  const sendIMG = (madkt, dataArray) => {
     if (!ws.current) return;
 
     ws.current.send(
       JSON.stringify({
         ma_dot_kiem_tra: madkt,
-        multi_images_data: selectedFile,
+        multi_images_data: dataArray,
       })
     );
+    // handleClose();
+    setOpen(false);
+  };
+
+  const handelsubumit = async () => {
+    const ma_dot_kiem_tra = post.ma_dot_kiem_tra;
+
     dispatch({
       type: actions.MODE_SHOW_VIDEO,
       data: "LIVE",
     });
     dispatch({
       type: actions.TYPE_WS_DATA,
-      data: "IMG",
+      data: !SelectIMG ? "VIDEO" : "IMG",
     });
     dispatch({
       type: actions.TUYEN_GS,
@@ -413,14 +402,35 @@ export default function DialogSavePopup2(props) {
         -
         ${post.ket_thuc_doan} )`,
     });
-    // handleClose();
-    setOpen(false);
-  };
 
-  const handelsubumit = async () => {
-    !SelectIMG
-      ? sendvideo(post.ma_dot_kiem_tra)
-      : sendIMG(post.ma_dot_kiem_tra);
+    const formData = new FormData();
+    formData.append("ma_tuyen", post.ma_tuyen);
+    formData.append("bat_dau_doan", post.bat_dau_doan);
+    formData.append("ket_thuc_doan", post.ket_thuc_doan);
+    formData.append("ngay_kiem_tra", post.ngay_kiem_tra);
+    formData.append("type", !SelectIMG ? "video" : "img");
+    if (!SelectIMG) {
+      formData.append("video", selectedFile);
+      formData.append("srt", Srt);
+    } else {
+      formData.append("multi_images", selectedFile);
+    }
+
+    axios({
+      method: "post",
+      url: `${uploadvideo}/${ma_dot_kiem_tra}`,
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    }).then(
+      (response) => {
+        !SelectIMG
+          ? sendvideo(ma_dot_kiem_tra, response?.data)
+          : sendIMG(ma_dot_kiem_tra, response?.data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   };
 
   const renderchoice = () => {

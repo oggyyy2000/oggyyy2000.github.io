@@ -247,7 +247,7 @@ export default function DotBay() {
 
   const GetListIMG = (id) => {
     async function getDataListImg(id) {
-      let urlg = urllistanh + id;
+      let urlg = urllistanh + "/" + id;
       try {
         let res = await axios({
           url: urlg,

@@ -56,6 +56,14 @@ export default function FullViewMap() {
       type: actions.SHOW_INFO_ERROR,
       data: null,
     });
+    dispatch({
+      type: actions.WS_TOA_DO,
+      data: [],
+    });
+    dispatch({
+      type: actions.WS_TOA_DO2,
+      data: [],
+    });
   };
 
   const sleep = (milliseconds) => {
