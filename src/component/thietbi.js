@@ -539,7 +539,7 @@ export default function ThietBi() {
       >
         {DataDetail && DataDetail?.ma_thiet_bi
           ? renderPostDetail(DataDetail)
-          : fetchedData && fetchedData?.data?.length !== 0}
+          : ""}
       </Box>
     </Box>
   );

@@ -16,18 +16,10 @@ import ImportExportIcon from "@material-ui/icons/ImportExport";
 import SaveIcon from "@material-ui/icons/Save";
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 //-----------------------------------------
 import Loading from "../../generalObject/Loading";
-// data
-/*import { T1 } from "../../../util/toado/T1";
-import { T2 } from "../../../util/toado/T2";
-import { T3 } from "../../../util/toado/T3";
-import { T4 } from "../../../util/toado/T4";
-import { T5 } from "../../../util/toado/T5";
-import { T6 } from "../../../util/toado/T6";
-import { T7 } from "../../../util/toado/T7";
-import { T8 } from "../../../util/toado/T8";*/
-///////////////////////////////////////////
+
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../redux/types";
 import { WSContext } from "../../main/contexts/WSContext";
@@ -133,7 +125,7 @@ export default function DialogSavePopup(props) {
   const [ThisDot, setThisDot] = useState(null);
   const [selectedFile, SetSelectedFile] = useState(null);
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
-    Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"
+    Tuyen ? "&ma_tuyen=" + Tuyen : ""
   }`;
   const [ListVTT, setListVTT] = useState([]);
 
@@ -413,6 +405,21 @@ export default function DialogSavePopup(props) {
     return false;
   }
 
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
   async function onChangeHandler2(e) {
     var temp = [];
     var tempname = [];
@@ -422,7 +429,8 @@ export default function DialogSavePopup(props) {
     for (let i = 0; i < file.length; i++) {
       if (isImage(file[i])) {
         if (file[i]) {
-          const base64 = file[i];
+          const base64 = await convertBase64(file[i]);
+          //const base64 = file[i];
           temp.push(base64.split("base64,")[1]);
           tempname.push(
             `${i}_${file[i].name
@@ -480,7 +488,7 @@ export default function DialogSavePopup(props) {
       video_data: dataArray[0],
       gis_data: dataArray[1],
     });
-
+    ws.current.send(data);
     // handleClose();
     setOpen(false);
   };
@@ -513,7 +521,7 @@ export default function DialogSavePopup(props) {
 
     dispatch({
       type: actions.TUYEN_GS,
-      data: `${getTextDisplay(Tuyen)} ( 
+      data: `${getTextDisplay(Tuyen, ListTuyen)} ( 
         ${batdau}
         -
         ${ketthuc} )`,
@@ -528,6 +536,7 @@ export default function DialogSavePopup(props) {
         ? sendvideo(ThisDot)
         : sendIMG(Dot);
     } else {*/
+
     axios
       .post(urltdkt, {
         ma_tuyen: Tuyen,
@@ -544,40 +553,46 @@ export default function DialogSavePopup(props) {
           props.reload();
           setThisDot(response.data.ma_dot_kiem_tra);
           const ma_dot_kiem_tra = response.data.ma_dot_kiem_tra;
-          const formData = new FormData();
-          formData.append("ma_tuyen", Tuyen);
-          formData.append("bat_dau_doan", batdau);
-          formData.append("ket_thuc_doan", ketthuc);
-          formData.append("ngay_kiem_tra", formatDate(DateDB));
-          formData.append("type", !SelectIMG ? "video" : "img");
-          if (!SelectIMG) {
-            formData.append("video", selectedFile);
-            formData.append("srt", Srt);
-          } else {
-            formData.append("multi_images", selectedFile);
-          }
-          axios({
-            method: "post",
-            url: `${uploadvideo}/${ma_dot_kiem_tra}`,
-            data: formData,
-            headers: { "Content-Type": "multipart/form-data" },
-          }).then(
-            (response) => {
-              props.reload();
 
-              !SelectIMG
-                ? sendvideo(ma_dot_kiem_tra, response?.data)
-                : sendIMG(ma_dot_kiem_tra, response?.data);
-            },
-            (error) => {
-              console.log(error);
+          if (SelectIMG) {
+            sendIMG(ma_dot_kiem_tra, selectedFile);
+          } else {
+            const formData = new FormData();
+            formData.append("ma_tuyen", Tuyen);
+            formData.append("bat_dau_doan", batdau);
+            formData.append("ket_thuc_doan", ketthuc);
+            formData.append("ngay_kiem_tra", formatDate(DateDB));
+            formData.append("type", !SelectIMG ? "video" : "img");
+            if (!SelectIMG) {
+              formData.append("video", selectedFile);
+              formData.append("srt", Srt);
+            } else {
+              formData.append("multi_images", selectedFile);
             }
-          );
+            axios({
+              method: "post",
+              url: `${uploadvideo}/${ma_dot_kiem_tra}`,
+              data: formData,
+              headers: { "Content-Type": "multipart/form-data" },
+            }).then(
+              (response) => {
+                props.reload();
+
+                !SelectIMG
+                  ? sendvideo(ma_dot_kiem_tra, response?.data)
+                  : sendIMG(ma_dot_kiem_tra, response?.data);
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+          }
         },
         (error) => {
           console.log(error);
         }
       );
+
     // }
   };
 

@@ -66,7 +66,7 @@ function DataFetching() {
   const classes = useStyles();
   const [ListTuyen, setListTuyen] = useState([]);
   const [ListThietbi, setListThietBi] = useState({});
-  const [Tuyen, setTuyen] = useState("");
+  const [Tuyen, setTuyen] = useState("T87");
   const dispatch = useDispatch();
   const anhthietbiloi = useSelector((state) => state.anhthietbiloi);
   const idtuyen = useSelector((state) => state.idtuyen);
@@ -78,9 +78,7 @@ function DataFetching() {
   const [gridSize, setGridSize] = useState({ panelone: 12, paneltwo: 0 });
   const urltttbgs = `${
     process.env.REACT_APP_API_URL
-  }getallttgiamsatthietbis?page=${page}${
-    Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"
-  }`;
+  }getallttgiamsatthietbis?page=${page}${Tuyen ? "&ma_tuyen=" + Tuyen : ""}`;
 
   const handleChangePage = (e, p) => {
     setPage(p);
@@ -99,7 +97,7 @@ function DataFetching() {
       .get(urlt)
       .then((res) => {
         setListTuyen(res.data);
-        setTuyen(res?.data[0]?.ma_tuyen);
+        //setTuyen(res?.data[0]?.ma_tuyen);
       })
       .catch((err) => {
         console.log(err);
@@ -225,6 +223,7 @@ function DataFetching() {
                         minWidth: "30%",
                         marginLeft: 10,
                       }}
+                      disabled
                     >
                       <InputLabel id="label-tuyen">Tuyến</InputLabel>
                       <Select

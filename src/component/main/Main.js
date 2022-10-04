@@ -218,10 +218,16 @@ const Navbar = [
     url: "/app/thongke",
     icon: <EqualizerRoundedIcon />,
   },
-  {
+  /*{
     index: 9,
     ten_navbar: "Phân tích dữ liệu",
     url: "/app/phantichdulieu",
+    icon: <EqualizerRoundedIcon />,
+  },*/
+  {
+    index: 9,
+    ten_navbar: "Danh sách bất thường",
+    url: "/app/dsbt",
     icon: <EqualizerRoundedIcon />,
   },
   {

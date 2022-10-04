@@ -101,6 +101,7 @@ export default function DialogSavePopup2(props) {
   const [SelectIMG, setSelectIMG] = useState(false);
   const [Srt, setSrt] = useState(null);
   const [ListCot, setListCot] = useState([]);
+  const ListTuyen = useSelector((state) => state.listtuyen);
   const dispatch = useDispatch();
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
     props?.ma_tuyen ? "&ma_tuyen=" + props?.ma_tuyen : "&none=0"
@@ -316,8 +317,8 @@ export default function DialogSavePopup2(props) {
     for (let i = 0; i < file.length; i++) {
       if (isImage(file[i])) {
         if (file[i]) {
-          //const base64 = await convertBase64(file[i]);
-          const base64 = file[i];
+          const base64 = await convertBase64(file[i]);
+          //const base64 = file[i];
           temp.push(base64.split("base64,")[1]);
           tempname.push(
             `${i}_${file[i].name
@@ -397,40 +398,44 @@ export default function DialogSavePopup2(props) {
     });
     dispatch({
       type: actions.TUYEN_GS,
-      data: `${getTextDisplay(post.ma_tuyen)} ( 
+      data: `${getTextDisplay(post.ma_tuyen, ListTuyen)} ( 
         ${post.bat_dau_doan}
         -
         ${post.ket_thuc_doan} )`,
     });
 
-    const formData = new FormData();
-    formData.append("ma_tuyen", post.ma_tuyen);
-    formData.append("bat_dau_doan", post.bat_dau_doan);
-    formData.append("ket_thuc_doan", post.ket_thuc_doan);
-    formData.append("ngay_kiem_tra", post.ngay_kiem_tra);
-    formData.append("type", !SelectIMG ? "video" : "img");
-    if (!SelectIMG) {
-      formData.append("video", selectedFile);
-      formData.append("srt", Srt);
+    if (SelectIMG) {
+      sendIMG(ma_dot_kiem_tra, selectedFile);
     } else {
-      formData.append("multi_images", selectedFile);
-    }
-
-    axios({
-      method: "post",
-      url: `${uploadvideo}/${ma_dot_kiem_tra}`,
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" },
-    }).then(
-      (response) => {
-        !SelectIMG
-          ? sendvideo(ma_dot_kiem_tra, response?.data)
-          : sendIMG(ma_dot_kiem_tra, response?.data);
-      },
-      (error) => {
-        console.log(error);
+      const formData = new FormData();
+      formData.append("ma_tuyen", post.ma_tuyen);
+      formData.append("bat_dau_doan", post.bat_dau_doan);
+      formData.append("ket_thuc_doan", post.ket_thuc_doan);
+      formData.append("ngay_kiem_tra", post.ngay_kiem_tra);
+      formData.append("type", !SelectIMG ? "video" : "img");
+      if (!SelectIMG) {
+        formData.append("video", selectedFile);
+        formData.append("srt", Srt);
+      } else {
+        formData.append("multi_images", selectedFile);
       }
-    );
+
+      axios({
+        method: "post",
+        url: `${uploadvideo}/${ma_dot_kiem_tra}`,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      }).then(
+        (response) => {
+          !SelectIMG
+            ? sendvideo(ma_dot_kiem_tra, response?.data)
+            : sendIMG(ma_dot_kiem_tra, response?.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    }
   };
 
   const renderchoice = () => {

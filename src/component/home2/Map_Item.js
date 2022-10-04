@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import "./../asset/css/panel.css";
+//import "./../asset/css/panel.css";
 import {
   GoogleMap,
   InfoWindow,
@@ -8,7 +8,7 @@ import {
   withScriptjs,
   Polyline,
 } from "react-google-maps";
-import { store } from "./../index";
+import { store } from "../../index";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import Box from "@material-ui/core/Box";
 import $ from "jquery";
@@ -31,9 +31,9 @@ import {
   MenuItem,
   Select,
 } from "@material-ui/core";
-import Loading from "./generalObject/Loading";
-import { optionltb } from "../util/optionloaitb";
-import { ChangerUrl } from "../util/ChangeUrl";
+import Loading from "../generalObject/Loading";
+//import { optionltb } from "../util/optionloaitb";
+//import { ChangerUrl } from "../util/ChangeUrl";
 import { Pagination } from "@material-ui/lab";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -688,174 +688,6 @@ const ThietBi2 = () => {
             <button className="btnMap" onClick={screen1.exit}>
               <FullscreenExitIcon style={{ width: 35, height: 35 }} />
             </button>
-          )}
-          <div className={classes.leftpanel}>
-            <FormControl
-              variant={"outlined"}
-              style={{
-                alignSelf: "center",
-                minwidth: "43%",
-                width: "43%",
-                //marginLeft: 10,
-                marginLeft: 18,
-              }}
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                Chọn Tuyến
-              </InputLabel>
-              <Select
-                width="100%"
-                className={classes.select}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label={"Chọn Tuyến"}
-                value={Tuyen}
-                style={{ height: 40 }}
-                onChange={onChangeSelectTuyen}
-                displayEmpty
-                disabled
-              >
-                <MenuItem value={""}>Trống</MenuItem>
-                {ListTuyen ? (
-                  ListTuyen.map((item, index) => (
-                    <MenuItem key={index} value={item.ma_tuyen}>
-                      {/*item.tt_tuyen*/}
-                      {item.ten_tuyen}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <Loading />
-                )}
-              </Select>
-            </FormControl>
-            {/*<FormControl
-              variant={"outlined"}
-              style={{
-                alignSelf: "center",
-                minwidth: "30%",
-                width: "30%",
-                marginLeft: 10,
-              }}
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                Chọn Loại Sản Phẩm
-              </InputLabel>
-              <Select
-                width="100%"
-                className={classes.select}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label={"Chọn Loại Sản Phẩm"}
-                value={Loai}
-                //displayEmpty
-                style={{ height: 40 }}
-                onChange={onChangeSelectLTB}
-              >
-                <MenuItem value={""}>Trống</MenuItem>
-                {optionltb
-                  ? optionltb.map((item, index) => (
-                      <MenuItem key={index} value={item.value}>
-                        {item.text}
-                      </MenuItem>
-                    ))
-                  : ""}
-              </Select>
-                  </FormControl>*/}
-            <FormControl
-              variant={"outlined"}
-              style={{
-                alignSelf: "center",
-                minwidth: "43%",
-                width: "43%",
-                marginLeft: 10,
-              }}
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                Chọn Vị Trí
-              </InputLabel>
-              <Select
-                width="100%"
-                className={classes.select}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label={"Chọn Tuyến"}
-                value={VTT}
-                style={{ height: 40 }}
-                onChange={onChangeSelectVTT}
-                //displayEmpty
-              >
-                <MenuItem value={""}>Trống</MenuItem>
-                {ListVTT ? (
-                  ListVTT.map((item, index) => (
-                    <MenuItem key={index} value={item.ma_vi_tri}>
-                      {item.ten_vi_tri}
-                    </MenuItem>
-                  ))
-                ) : (
-                  <Loading />
-                )}
-              </Select>
-            </FormControl>
-            <div style={{ marginTop: 10 }}>
-              <Pagination
-                id="Pagination"
-                className={classes.pagination}
-                count={fetchedData?.last_page || 0}
-                size="large"
-                page={page}
-                color="primary"
-                shape="rounded"
-                onChange={handleChangePage}
-              />
-              {ExpandState ? (
-                <button
-                  className="btnExpand"
-                  onClick={() => setExpandState(false)}
-                >
-                  <ExpandLessIcon style={{ width: 30, height: 30 }} />
-                </button>
-              ) : (
-                <button
-                  className="btnExpand"
-                  onClick={() => setExpandState(true)}
-                >
-                  <ExpandMoreIcon style={{ width: 30, height: 30 }} />
-                </button>
-              )}
-            </div>
-            {ExpandState ? (
-              <div className={classes.listItem}>
-                {fetchedData ? (
-                  fetchedData?.data?.length !== 0 ? (
-                    fetchedData?.data?.map((post) => render(post))
-                  ) : (
-                    <div>
-                      <p
-                        style={{
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%,-50%)",
-                          position: "absolute",
-                        }}
-                      >
-                        Không có dữ liệu bạn cần tìm, vui lòng trở lại sau!
-                      </p>
-                    </div>
-                  )
-                ) : (
-                  <Loading />
-                )}
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-          {DetailState && (
-            <div className={classes.rightpanel}>
-              {DataDetail && DataDetail?.ma_thiet_bi
-                ? renderPostDetail(DataDetail)
-                : ""}
-            </div>
           )}
         </FullScreen>
       </Provider>

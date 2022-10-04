@@ -4,6 +4,7 @@ import Camera from "./component/camera/camera";
 import Dashboard from "./component/dashboard/dashboard";
 import Login from "./component/login";
 import Home from "./component/home/Home";
+import Home2 from "./component/home2/Home";
 import TestPage from "./component/TestPage";
 import Page404 from "./component/Page404";
 import ThietBi from "./component/thietbi";
@@ -18,6 +19,7 @@ import Redirect404 from "./component/RedirectPage/Redirect404";
 import ProtectedRoute from "./protectedRouter";
 import DataFetching from "./component/test/DataFetching";
 import Bieudothongke from "./component/test/bieudothongke";
+import DSBT from "./component/dsbtt/dsbt";
 
 const routes = [
   {
@@ -31,7 +33,11 @@ const routes = [
       { path: "bando", element: <ProtectedRoute component={Account} /> },
       { path: "camera", element: <ProtectedRoute component={Camera} /> },
       { path: "thongke", element: <ProtectedRoute component={Dashboard} /> },
-      { path: "trangchu", element: <ProtectedRoute component={Home} /> },
+      {
+        path: "trangchu",
+        element: <ProtectedRoute component={Home2} />,
+        //<ProtectedRoute component={Home} />
+      },
       {
         path: "thietbi",
         //element: <ProtectedRoute component={ThietBi} />,
@@ -53,6 +59,7 @@ const routes = [
       { path: "m3d", element: <ProtectedRoute component={Main3D} /> },
       { path: "*", element: <ProtectedRoute component={Redirect404} /> },
       { path: "test", element: <ProtectedRoute component={DataFetching} /> },
+      { path: "dsbt", element: <ProtectedRoute component={DSBT} /> },
     ],
   },
   {
