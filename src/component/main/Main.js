@@ -248,6 +248,7 @@ function Main() {
   const [Visibility, setVisibility] = useState(true);
   const [heighto, setHeighto] = useState(0);
   const pageSize = useSelector((state) => state.pageSize);
+  const [prevCurrentPage, setPrevCurrentPage] = useState("");
 
   let navigate = useNavigate();
   let location = useLocation();
@@ -257,6 +258,26 @@ function Main() {
     var item = Navbar.find((x) => x.url === path);
     if (item) {
       setValue(item.index);
+      if (prevCurrentPage !== "") {
+        if (prevCurrentPage === "/app/m3d") {
+          window.location.reload();
+        }
+      }
+      setPrevCurrentPage(path);
+    }
+  }, []);
+
+  useEffect(() => {
+    var path = window.location.pathname;
+    var item = Navbar.find((x) => x.url === path);
+    if (item) {
+      setValue(item.index);
+      if (prevCurrentPage !== "") {
+        if (prevCurrentPage === "/app/m3d") {
+          window.location.reload();
+        }
+      }
+      setPrevCurrentPage(path);
     }
   }, [location]);
 
@@ -344,14 +365,6 @@ function Main() {
     window.addEventListener("resize", updateSize);
     updateSize();
     return () => window.removeEventListener("resize", updateSize);
-  }, []);
-
-  useEffect(() => {
-    var path = window.location.pathname;
-    var item = Navbar.find((x) => x.url === path);
-    if (item) {
-      setValue(item.index);
-    }
   }, []);
 
   return (
