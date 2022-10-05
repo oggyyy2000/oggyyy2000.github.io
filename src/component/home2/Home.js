@@ -192,7 +192,7 @@ export default function Home() {
                 <ResizeVertical height={sizeResize.height1} id="dotbay">
                   <button
                     className="btnRedict"
-                    onClick={() => navigate("/app/dsbt")}
+                    onDoubleClick={() => navigate("/app/dsbt")}
                   >
                     <ChartDSBT tuyen={Tuyen} />
                   </button>
@@ -200,7 +200,7 @@ export default function Home() {
                 <ResizeVertical height={sizeResize.height2} id="map">
                   <button
                     className="btnRedict"
-                    onClick={() => navigate("/app/test")}
+                    onDoubleClick={() => navigate("/app/test")}
                   >
                     <DataFetching tuyen={Tuyen} />
                   </button>
@@ -212,7 +212,7 @@ export default function Home() {
                 <ResizeVertical height={sizeResize.height1} id="dotbay">
                   <button
                     className="btnRedict"
-                    onClick={() => navigate("/app/thietbi")}
+                    onDoubleClick={() => navigate("/app/thietbi")}
                   >
                     <Map_Item tuyen={Tuyen} />
                   </button>
@@ -220,7 +220,7 @@ export default function Home() {
                 <ResizeVertical height={sizeResize.height2} id="map">
                   <button
                     className="btnRedict"
-                    onClick={() => navigate("/app/nhapdulieu")}
+                    onDoubleClick={() => navigate("/app/nhapdulieu")}
                   >
                     <DotBay tuyen={Tuyen} />
                   </button>
