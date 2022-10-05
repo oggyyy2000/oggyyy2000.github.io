@@ -185,27 +185,27 @@ const Navbar = [
   },
   {
     index: 3,
+    ten_navbar: "Quản lý thiết bị",
+    url: "/app/thietbi",
+    icon: <EventNoteIcon />,
+  },
+  {
+    index: 4,
     ten_navbar: "Giám sát sức khỏe thiết bị",
     url: "/app/sktb",
     icon: <EqualizerRoundedIcon />,
   },
   {
-    index: 4,
-    ten_navbar: "Quản lý thiết bị",
-    url: "/app/thietbi",
-    icon: <EventNoteIcon />,
-  },
-  /*{
     index: 5,
-    ten_navbar: "Quản lý ảnh",
-    url: "/app/quanlyanh",
-    icon: <PhotoAlbumIcon />,
-  },*/
+    ten_navbar: "Danh sách bất thường",
+    url: "/app/dsbt",
+    icon: <EqualizerRoundedIcon />,
+  },
   {
     index: 6,
-    ten_navbar: "Bảo dưỡng",
-    url: "/app/bando",
-    icon: <BuildIcon />,
+    ten_navbar: "Hành Lang Tuyến",
+    url: "/app/m3d",
+    icon: <AddCircleOutlineIcon />,
   },
   {
     index: 7,
@@ -215,28 +215,30 @@ const Navbar = [
   },
   {
     index: 8,
-    ten_navbar: "Hành Lang Tuyến",
-    url: "/app/m3d",
-    icon: <AddCircleOutlineIcon />,
+    ten_navbar: "Bảo dưỡng",
+    url: "/app/bando",
+    icon: <BuildIcon />,
   },
+  /*
   {
     index: 9,
+    ten_navbar: "Quản lý ảnh",
+    url: "/app/quanlyanh",
+    icon: <PhotoAlbumIcon />,
+  },
+  {
+    index: 10,
     ten_navbar: "Thống kê",
     url: "/app/thongke",
     icon: <EqualizerRoundedIcon />,
   },
   {
-    index: 10,
-    ten_navbar: "Danh sách bất thường",
-    url: "/app/dsbt",
-    icon: <EqualizerRoundedIcon />,
-  },
-  /*{
-    index: 9,
+    index: 11,
     ten_navbar: "Phân tích dữ liệu",
     url: "/app/phantichdulieu",
     icon: <EqualizerRoundedIcon />,
-  },*/
+  },
+  */
 ];
 
 function Main() {
