@@ -158,3 +158,8 @@
 .btnRedict:focus {
   outline: none;
 }
+
+#TrangChuContainer2 > div.resize {
+  /*height: 90%;*/
+  margin-top: 46px;
+}

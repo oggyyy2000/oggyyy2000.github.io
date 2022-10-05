@@ -22,6 +22,8 @@ const Bieudothongke = (props) => {
 
   const ctx = "myChart";
 
+  const classItem = ["cach_dien_silicon", "cach_dien_thuy_tinh", "day_dien"];
+
   function ClickHandler(event) {
     const firstPoint = event[0];
     if (firstPoint) {
@@ -30,10 +32,43 @@ const Bieudothongke = (props) => {
       const value =
         data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
       dispatch({ type: actions.idthietbi, data: label });
-      dispatch({
+      /*dispatch({
         type: actions.idanh,
         data: {},
-      });
+      });*/
+      let data1 = anhthietbiloi?.data[firstPoint._index] || [];
+
+      if (data1) {
+        let FristClassExit = classItem.find((item) => {
+          return data1[Object.keys(data1)[0]][item];
+        });
+        if (FristClassExit) {
+          let data2 = data1[Object.keys(data1)[0]][FristClassExit][0];
+          if (data2) {
+            let cotdau = Object.keys(data1)[0];
+            if (cotdau) {
+              dispatch({ type: actions.idthietbi, data: cotdau });
+
+              let fristId = data2?.ma_thiet_bi;
+
+              if (fristId) {
+                let obj = {};
+                obj.loai = FristClassExit;
+                obj.ma_thiet_bi = fristId;
+                dispatch({
+                  type: actions.idanh,
+                  data: obj,
+                });
+              }
+            }
+          }
+        } else {
+          dispatch({
+            type: actions.idanh,
+            data: {},
+          });
+        }
+      }
     }
   }
 
@@ -179,12 +214,12 @@ const Bieudothongke = (props) => {
 
   return (
     <Card {...props}>
-      <CardHeader title="THỐNG KÊ THIẾT BỊ" />
+      <CardHeader title="THỐNG KÊ THIẾT BỊ" style={{ padding: 6 }} />
       <Divider />
       <CardContent>
         <Box
           style={{
-            height: 300,
+            height: 310,
           }}
           id="canvas-container"
         >

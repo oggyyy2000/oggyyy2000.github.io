@@ -58,7 +58,7 @@ const routes = [
       { path: "ts", element: <ProtectedRoute component={TestPage} /> },
       { path: "m3d", element: <ProtectedRoute component={Main3D} /> },
       { path: "*", element: <ProtectedRoute component={Redirect404} /> },
-      { path: "test", element: <ProtectedRoute component={DataFetching} /> },
+      { path: "sktb", element: <ProtectedRoute component={DataFetching} /> },
       { path: "dsbt", element: <ProtectedRoute component={DSBT} /> },
     ],
   },

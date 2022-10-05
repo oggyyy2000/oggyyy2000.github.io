@@ -42,13 +42,13 @@ const useStyles = makeStyles(() => ({
       backgroundColor: "transparent",
     },
     "&::-webkit-scrollbar-thumb": {
-      backgroundColor: "#1976d2",
+      backgroundColor: "#bababa",
       borderRadius: 20,
       border: "6px solid transparent",
       backgroundClip: "content-box",
     },
     "&::-webkit-scrollbar-thumb:hover": {
-      backgroundColor: "rgb(17, 82, 147)",
+      backgroundColor: "#bababa",
     },
   },
   pagination: {
@@ -113,6 +113,8 @@ function DataFetching() {
     }, {});
   }
 
+  const classItem = ["cach_dien_silicon", "cach_dien_thuy_tinh", "day_dien"];
+
   useEffect(() => {
     axios
       .get(urltttbgs)
@@ -130,11 +132,40 @@ function DataFetching() {
         }
 
         dispatch({ type: actions.anhthietbiloi, data: res.data });
-        setdEtail({});
-        dispatch({
-          type: actions.idanh,
-          data: {},
-        });
+        // Set Frist Item
+        let data1 = res?.data?.data[0] || [];
+        if (data1) {
+          let FristClassExit = classItem.find((item) => {
+            return data1[Object.keys(data1)[0]][item];
+          });
+          if (FristClassExit) {
+            let data2 = data1[Object.keys(data1)[0]][FristClassExit][0];
+            if (data2) {
+              let cotdau = Object.keys(data1)[0];
+              if (cotdau) {
+                dispatch({ type: actions.idthietbi, data: cotdau });
+
+                let fristId = data2?.ma_thiet_bi;
+
+                if (fristId) {
+                  let obj = {};
+                  obj.loai = FristClassExit;
+                  obj.ma_thiet_bi = fristId;
+                  dispatch({
+                    type: actions.idanh,
+                    data: obj,
+                  });
+                }
+              }
+            }
+          } else {
+            dispatch({
+              type: actions.idanh,
+              data: {},
+            });
+          }
+        }
+        //setdEtail({});
       })
       .catch((err) => {
         console.log(err);
@@ -212,7 +243,7 @@ function DataFetching() {
                       display: "flex",
                       justifyContent: "space-between",
                       flexWrap: "wrap",
-                      marginBottom: 10,
+                      //marginBottom: 10,
                       marginTop: 10,
                     }}
                   >
@@ -223,7 +254,7 @@ function DataFetching() {
                         minWidth: "30%",
                         marginLeft: 10,
                       }}
-                      disabled
+                      // disabled
                     >
                       <InputLabel id="label-tuyen">Tuyến</InputLabel>
                       <Select
@@ -233,6 +264,7 @@ function DataFetching() {
                         onChange={handleChangeTuyen}
                         label="T"
                         defaultValue={""}
+                        style={{ height: 40 }}
                       >
                         {ListTuyen ? (
                           ListTuyen.map((item, index) => (
@@ -264,7 +296,15 @@ function DataFetching() {
                     </div>
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      padding: 13,
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                    }}
+                  >
                     <Bieudothongke />
                   </Grid>
 
@@ -290,7 +330,7 @@ function DataFetching() {
                   >
                     <ArrowBackIcon />
                   </IconButton>
-                  <Grid container spacing={3}>
+                  <Grid container /*spacing={3}*/>
                     <Grid
                       item
                       xs={12}
@@ -360,9 +400,7 @@ function DataFetching() {
                                   />
                                 )}
                             </div>
-                            <CardHeader
-                              title={"Ảnh thiết qua các đợt kiểm tra"}
-                            />
+                            <CardHeader title={"Ảnh thiết bị mới nhất"} />
 
                             {dEtail &&
                               dEtail?.thong_tin_giam_sat_tb &&

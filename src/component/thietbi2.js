@@ -126,7 +126,7 @@ const ThietBi2 = () => {
   const [DetailState, setDetailState] = useState(false);
   const urltb = `${
     process.env.REACT_APP_API_URL
-  }getallthietbituyens?page=${page}${Tuyen ? "&ma_tuyen=" + Tuyen : "s"}${
+  }getallthietbituyens?page=${page}${Tuyen ? "&ma_tuyen=" + Tuyen : ""}${
     Loai ? "&loai_thiet_bi=" + Loai : ""
   }${VTT ? "&ma_vi_tri=" + VTT : ""}`;
   const urlt = process.env.REACT_APP_API_URL + "getalltuyens";
@@ -295,7 +295,7 @@ const ThietBi2 = () => {
         setCenter({ lat: ToaDo[0], lng: ToaDo[1] });
       }
     });
-  }, [Tuyen]);
+  }, [Tuyen, VTT]);
 
   const onChange = (event, setFunction) => {
     event.preventDefault();
@@ -468,10 +468,21 @@ const ThietBi2 = () => {
                     //onDragEnd={onMarkerDragEnd}
                     position={{ lat: lat, lng: lng }}
                     onClick={() => {
-                      console.log(ListVTT[index]);
+                      console.log(item);
                       //SetshowInfoIndex(index);
                     }}
-                  ></Marker>
+                  >
+                    {ListSVTT && ListSVTT.length === 1 && (
+                      <InfoWindow>
+                        <Box style={{ color: "black", width: 140 }}>
+                          <b>Cột: {item?.ten_vi_tri}</b>
+                          <p>
+                            Tọa độ: {lat} , {lng}
+                          </p>
+                        </Box>
+                      </InfoWindow>
+                    )}
+                  </Marker>
                 );
               }
             })}
@@ -493,10 +504,6 @@ const ThietBi2 = () => {
   const render = (post) => {
     return (
       <Card className={classes.root} key={post.ma_thiet_bi}>
-        {/*<CardMedia
-          className={classes.cover}
-          image={ChangerUrl(post.anh_thiet_bi)}
-    />*/}
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h5" variant="h5">
@@ -696,7 +703,6 @@ const ThietBi2 = () => {
                 alignSelf: "center",
                 minwidth: "43%",
                 width: "43%",
-                //marginLeft: 10,
                 marginLeft: 18,
               }}
             >
@@ -713,13 +719,12 @@ const ThietBi2 = () => {
                 style={{ height: 40 }}
                 onChange={onChangeSelectTuyen}
                 displayEmpty
-                disabled
+                //disabled
               >
                 <MenuItem value={""}>Trống</MenuItem>
                 {ListTuyen ? (
                   ListTuyen.map((item, index) => (
                     <MenuItem key={index} value={item.ma_tuyen}>
-                      {/*item.tt_tuyen*/}
                       {item.ten_tuyen}
                     </MenuItem>
                   ))
@@ -728,39 +733,6 @@ const ThietBi2 = () => {
                 )}
               </Select>
             </FormControl>
-            {/*<FormControl
-              variant={"outlined"}
-              style={{
-                alignSelf: "center",
-                minwidth: "30%",
-                width: "30%",
-                marginLeft: 10,
-              }}
-            >
-              <InputLabel id="demo-simple-select-outlined-label">
-                Chọn Loại Sản Phẩm
-              </InputLabel>
-              <Select
-                width="100%"
-                className={classes.select}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                label={"Chọn Loại Sản Phẩm"}
-                value={Loai}
-                //displayEmpty
-                style={{ height: 40 }}
-                onChange={onChangeSelectLTB}
-              >
-                <MenuItem value={""}>Trống</MenuItem>
-                {optionltb
-                  ? optionltb.map((item, index) => (
-                      <MenuItem key={index} value={item.value}>
-                        {item.text}
-                      </MenuItem>
-                    ))
-                  : ""}
-              </Select>
-                  </FormControl>*/}
             <FormControl
               variant={"outlined"}
               style={{
@@ -829,17 +801,8 @@ const ThietBi2 = () => {
                   fetchedData?.data?.length !== 0 ? (
                     fetchedData?.data?.map((post) => render(post))
                   ) : (
-                    <div>
-                      <p
-                        style={{
-                          top: "50%",
-                          left: "50%",
-                          transform: "translate(-50%,-50%)",
-                          position: "absolute",
-                        }}
-                      >
-                        Không có dữ liệu bạn cần tìm, vui lòng trở lại sau!
-                      </p>
+                    <div style={{ top: 10, height: "30px" }}>
+                      <p>Không có dữ liệu bạn cần tìm, vui lòng trở lại sau!</p>
                     </div>
                   )
                 ) : (

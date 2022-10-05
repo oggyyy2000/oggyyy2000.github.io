@@ -107,41 +107,22 @@ const ThietBi2 = (props) => {
   const [center, setCenter] = useState({ lat: 21.0286436, lng: 105.855725 });
   const [zoomsize, setZoomsize] = useState(15);
   const [pathPoint, SetPathPoint] = useState([]);
-  const [LinePoint, SetLinePoint] = useState([]);
-  const [showInfoIndex, SetshowInfoIndex] = useState(-1);
   const screen1 = useFullScreenHandle();
   const [stateBtn, setStateBtn] = useState(false);
-  const { tuyen } = props;
+  const { tuyen, VTT } = props;
   ///
-  const classes = useStyles();
-  const [page, setPage] = useState(1);
-  const [fetchedData, setFetchedData] = useState([]);
-  const [ListTuyen, setListTuyen] = useState([]);
-  //const [Tuyen, setTuyen] = useState("T87");
-  const [Loai, setLoai] = useState("");
   const [ListVTT, setListVTT] = useState([]);
   const [ListSVTT, setListSVTT] = useState([]);
-  const [VTT, setVTT] = useState("");
-  const [DataDetail, setDataDetail] = useState({});
-  const [ExpandState, setExpandState] = useState(true);
-  const [DetailState, setDetailState] = useState(false);
-  const urltb = `${
-    process.env.REACT_APP_API_URL
-  }getallthietbituyens?page=${page}${tuyen ? "&ma_tuyen=" + tuyen : ""}${
-    Loai ? "&loai_thiet_bi=" + Loai : ""
-  }${VTT ? "&ma_vi_tri=" + VTT : ""}`;
   const urlt = process.env.REACT_APP_API_URL + "getalltuyens";
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
     tuyen ? "&ma_tuyen=" + tuyen : ""
   }`;
 
-  ///
-  /*
   useEffect(() => {
-    async function getDatatb() {
+    async function getDatavtt() {
       try {
         let res = await axios({
-          url: urltb,
+          url: urlvt,
           method: "get",
           timeout: 8000,
           headers: {
@@ -149,7 +130,7 @@ const ThietBi2 = (props) => {
           },
         });
         if (res.status === 200) {
-          // console.log(res.status);
+          //  console.log(res.status);
         }
         return res.data;
       } catch (err) {
@@ -157,20 +138,24 @@ const ThietBi2 = (props) => {
       }
     }
 
-    getDatatb().then((res) => {
-      setFetchedData(res);
-      if (res && res?.data?.length != 0) {
-        setDataDetail(res?.data[0]);
-        setDetailState(true);
+    getDatavtt().then((res) => {
+      setListVTT(res);
+      if (VTT) {
+        let obj = res.find((x) => x.ma_vi_tri === VTT);
+        if (obj) {
+          setListSVTT([obj]);
+          let Toado = obj.toa_do.split(",");
+          setCenter({ lat: parseFloat(Toado[0]), lng: parseFloat(Toado[1]) });
+        }
       }
     });
   }, []);
-  */
+
   useEffect(() => {
-    async function getDatatb() {
+    async function getDatavtt() {
       try {
         let res = await axios({
-          url: urltb,
+          url: urlvt,
           method: "get",
           timeout: 8000,
           headers: {
@@ -178,7 +163,7 @@ const ThietBi2 = (props) => {
           },
         });
         if (res.status === 200) {
-          // console.log(res.status);
+          //  console.log(res.status);
         }
         return res.data;
       } catch (err) {
@@ -186,155 +171,18 @@ const ThietBi2 = (props) => {
       }
     }
 
-    getDatatb().then((res) => {
-      setFetchedData(res);
-      if (res && res?.data?.length != 0) {
-        setDataDetail(res?.data[0]);
-        //setDetailState(true);
+    getDatavtt().then((res) => {
+      setListVTT(res);
+      if (VTT) {
+        let obj = res.find((x) => x.ma_vi_tri === VTT);
+        if (obj) {
+          setListSVTT([obj]);
+          let Toado = obj.toa_do.split(",");
+          setCenter({ lat: parseFloat(Toado[0]), lng: parseFloat(Toado[1]) });
+        }
       }
     });
-  }, [page, tuyen, Loai, VTT]);
-
-  useEffect(() => {
-    if (VTT && ListVTT) {
-      let obj = ListVTT.find((x) => x.ma_vi_tri === VTT);
-      setListSVTT([obj]);
-    } else {
-      setListSVTT(ListVTT);
-    }
   }, [VTT]);
-
-  useEffect(() => {
-    async function getDatatuyen() {
-      try {
-        let res = await axios({
-          url: urlt,
-          method: "get",
-          timeout: 8000,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (res.status === 200) {
-          //  console.log(res.status);
-        }
-        return res.data;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    getDatatuyen().then((res) => {
-      setListTuyen(res);
-      //setTuyen(res[0].ma_tuyen);
-      //setTuyen("T87");
-    });
-  }, []);
-
-  useEffect(() => {
-    async function getDatavtt() {
-      try {
-        let res = await axios({
-          url: urlvt,
-          method: "get",
-          timeout: 8000,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (res.status === 200) {
-          //  console.log(res.status);
-        }
-        return res.data;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    getDatavtt().then((res) => {
-      setListVTT(res);
-      if (VTT && ListVTT) {
-        let obj = ListVTT.find((x) => x.ma_vi_tri === VTT);
-        setListSVTT([obj]);
-      } else {
-        setListSVTT(res);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    async function getDatavtt() {
-      try {
-        let res = await axios({
-          url: urlvt,
-          method: "get",
-          timeout: 8000,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (res.status === 200) {
-          //  console.log(res.status);
-        }
-        return res.data;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    getDatavtt().then((res) => {
-      setListVTT(res);
-
-      if (VTT && ListVTT) {
-        let obj = ListVTT.find((x) => x.ma_vi_tri === VTT);
-        setListSVTT([obj]);
-      } else {
-        setListSVTT(res);
-      }
-      if (res && res.length != 0) {
-        if (res[0]?.toa_do) {
-          let ToaDo = res[0]?.toa_do?.split(",");
-          setCenter({ lat: ToaDo[0], lng: ToaDo[1] });
-        }
-      }
-    });
-  }, [tuyen]);
-
-  const onChange = (event, setFunction) => {
-    event.preventDefault();
-    const target = event.target;
-    const value = target.value;
-    setFunction(value);
-  };
-
-  const onChangeSelectTuyen = (event) => {
-    //onChange(event, setTuyen);
-    setPage(1);
-    setListVTT([]);
-    setListSVTT([]);
-    setVTT("");
-  };
-
-  const onChangeSelectLTB = (event) => {
-    onChange(event, setLoai);
-    setPage(1);
-  };
-
-  const onChangeSelectVTT = (event) => {
-    onChange(event, setVTT);
-    setPage(1);
-  };
-
-  const Show = (data) => {
-    setDataDetail(data);
-    setDetailState(true);
-  };
-
-  const handleChangePage = (e, p) => {
-    setPage(p);
-  };
-
-  ///
 
   const reportChange = useCallback(
     (state, handle) => {
@@ -383,54 +231,6 @@ const ThietBi2 = (props) => {
     };
   }, []);
 
-  const onMarkerDragEnd = (event) => {
-    let newLat = event.latLng.lat();
-    let newLng = event.latLng.lng();
-  };
-
-  let pathCoordinates = [];
-
-  const calc_center = (Point) => {
-    if (Point && Point.length > 0) {
-      var mid = Math.round((Point.length - 1) / 2);
-      let ToaDo = Point[mid]?.toa_do?.split(",");
-      if (isNaN(ToaDo[0])) {
-        setCenter({ lat: 21, lng: 105 });
-        setZoomsize(15);
-      } else if (ToaDo[0]) {
-        setCenter({
-          lat: ToaDo[0],
-          lng: ToaDo[1],
-        });
-        setZoomsize(15);
-      }
-    }
-  };
-
-  const calc_center_and_draw = (Point) => {
-    if (Point) {
-      for (var i = 0; i < Point.length; i++) {
-        let ToaDo = Point[i]?.toa_do?.split(",");
-        if (!isNaN(parseFloat(ToaDo[0])) && !isNaN(parseFloat(ToaDo[1]))) {
-          pathCoordinates.push({
-            lat: parseFloat(ToaDo[0]),
-            lng: parseFloat(ToaDo[1]),
-          });
-        }
-      }
-      SetPathPoint(pathCoordinates);
-
-      calc_center(Point);
-    }
-    ///////////////////////
-  };
-
-  useEffect(() => {
-    calc_center_and_draw(ListSVTT);
-  }, [/*ListVTT*/ ListSVTT]);
-
-  const CloseInfoWindow = () => {};
-
   const MapWithAMarker = withScriptjs(
     withGoogleMap((props) => {
       /*let iconMarker = new window.google.maps.MarkerImage(
@@ -476,20 +276,19 @@ const ThietBi2 = (props) => {
                       console.log(ListVTT[index]);
                       //SetshowInfoIndex(index);
                     }}
-                  ></Marker>
+                  >
+                    <InfoWindow>
+                      <Box style={{ color: "black", width: 140 }}>
+                        <b>Cột: {item?.ten_vi_tri}</b>
+                        <p>
+                          Tọa độ: {lat} , {lng}
+                        </p>
+                      </Box>
+                    </InfoWindow>
+                  </Marker>
                 );
               }
             })}
-          {pathPoint && (
-            <Polyline
-              path={pathPoint}
-              options={{
-                strokeColor: "#ff2527",
-                strokeOpacity: 0.75,
-                strokeWeight: 2,
-              }}
-            />
-          )}
         </GoogleMap>
       );
     })

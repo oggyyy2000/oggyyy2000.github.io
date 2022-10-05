@@ -71,7 +71,7 @@ const useStyles = makeStyles(() => ({
     },
   },
 }));
-export default function DotBay() {
+export default function DotBay(props) {
   const urltb = process.env.REACT_APP_API_URL + "dotkiemtraimports";
   const urlt = process.env.REACT_APP_API_URL + "getalltuyens";
   const urllistvideo = process.env.REACT_APP_API_URL + "getvideodetectimport";
@@ -79,20 +79,21 @@ export default function DotBay() {
   const dispatch = useDispatch();
   const classes = useStyles();
   //const [ListCot, setListCot] = useState([]);
-  const [Tuyen, setTuyen] = useState("T87");
+  const { tuyen } = props;
+  //const [tuyen, settuyen] = useState("T87");
   const [BatDau, setBatDau] = useState(null);
   const [KetThuc, setKetThuc] = useState(null);
   const ModeShowVideo = useSelector((state) => state.modeshowvideo);
   const CurrentVideo = useSelector((state) => state.currentVideo);
   const fetchedData = useSelector((state) => state.dbtc);
-  const ListTuyen = useSelector((state) => state.listtuyen);
+  const Listtuyen = useSelector((state) => state.listtuyen);
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
-    Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"
+    tuyen ? "&ma_tuyen=" + tuyen : "&none=0"
   }`;
   const [ListVTT, setListVTT] = useState([]);
   let count = 0;
   let NodeIdx = 0;
-  let ListTuyenIT = [];
+  let ListtuyenIT = [];
   const Today = new Date();
   const DateNow =
     Today.getDate().toString().padStart(2, "0") +
@@ -161,7 +162,7 @@ export default function DotBay() {
   useEffect(() => {
     let componentMounted = true;
     const fetchData = async () => {
-      if (componentMounted && ListTuyen.length === 0) {
+      if (componentMounted && Listtuyen.length === 0) {
         getDatatuyen().then((res) => {
           if (res) {
             dispatch({
@@ -222,7 +223,7 @@ export default function DotBay() {
     }
 
     getDatavtt().then((res) => setListVTT(res));
-  }, [Tuyen]);
+  }, [tuyen]);
 
   const getdata = () => {
     getDataDB().then((res) => {
@@ -387,11 +388,11 @@ export default function DotBay() {
   }, [CurrentVideo]);
 
   useEffect(() => {
-    //if (Tuyen === null) {
+    //if (tuyen === null) {
     setBatDau(null);
     setKetThuc(null);
     //}
-  }, [Tuyen]);
+  }, [tuyen]);
 
   const onChange = (event, setFunction) => {
     event.preventDefault();
@@ -406,8 +407,8 @@ export default function DotBay() {
     dispatch({ type: actions.ON_CURRENT_LIST_COT_CHANGE, data: [] });
   };
 
-  const onChangeSelectTuyen = (event) => {
-    onChange(event, setTuyen);
+  const onChangeSelecttuyen = (event) => {
+    //onChange(event, settuyen);
     Resset_Cot();
     /*switch (event.target.value) {
       case "T1":
@@ -486,7 +487,7 @@ export default function DotBay() {
                   <DialogPopupImage
                     id={post.ma_dot_kiem_tra}
                     post={post}
-                    info={`${getTextDisplay(post.ma_tuyen, ListTuyen)} ( 
+                    info={`${getTextDisplay(post.ma_tuyen, Listtuyen)} ( 
                     ${post.bat_dau_doan}
                     -
                     ${post.ket_thuc_doan} )`}
@@ -536,11 +537,11 @@ export default function DotBay() {
   };
 
   const render = (post, Posts) => {
-    const ru = ListTuyenIT.indexOf(post.ma_tuyen);
-    if (ru === -1) ListTuyenIT.push(post.ma_tuyen);
+    const ru = ListtuyenIT.indexOf(post.ma_tuyen);
+    if (ru === -1) ListtuyenIT.push(post.ma_tuyen);
     NodeIdx++;
     var newdate = FormatDate(post.ngay_kiem_tra);
-    var TenTuyen = getTextDisplay(post.ma_tuyen, ListTuyen);
+    var Tentuyen = getTextDisplay(post.ma_tuyen, Listtuyen);
     return (
       <>
         {ru === -1 ? (
@@ -568,7 +569,7 @@ export default function DotBay() {
                   >
                     <ListItemText
                       className={classes.textContent}
-                      primary={TenTuyen}
+                      primary={Tentuyen}
                       secondary={newdate}
                     />
                   </ListItem>
@@ -608,31 +609,31 @@ export default function DotBay() {
       >
         {fetchedData ? (
           fetchedData.map((post, index) =>
-            Tuyen === null && BatDau === null && KetThuc === null ? (
+            tuyen === null && BatDau === null && KetThuc === null ? (
               render(post, fetchedData)
-            ) : Tuyen !== null &&
+            ) : tuyen !== null &&
               BatDau !== null &&
               KetThuc !== null &&
-              Tuyen === post.ma_tuyen &&
+              tuyen === post.ma_tuyen &&
               BatDau.split("|")[0] === post.bat_dau_doan &&
               KetThuc.split("|")[0] === post.ket_thuc_doan ? (
               render(post, fetchedData)
-            ) : Tuyen !== null &&
+            ) : tuyen !== null &&
               BatDau !== null &&
               KetThuc === null &&
-              Tuyen === post.ma_tuyen &&
+              tuyen === post.ma_tuyen &&
               BatDau.split("|")[0] === post.bat_dau_doan ? (
               render(post, fetchedData)
-            ) : Tuyen !== null &&
+            ) : tuyen !== null &&
               BatDau === null &&
               KetThuc !== null &&
-              Tuyen === post.ma_tuyen &&
+              tuyen === post.ma_tuyen &&
               KetThuc.split("|")[0] === post.ket_thuc_doan ? (
               render(post, fetchedData)
-            ) : Tuyen !== null &&
+            ) : tuyen !== null &&
               BatDau === null &&
               KetThuc === null &&
-              Tuyen === post.ma_tuyen ? (
+              tuyen === post.ma_tuyen ? (
               render(post, fetchedData)
             ) : (
               <>

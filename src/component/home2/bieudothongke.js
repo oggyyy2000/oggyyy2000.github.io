@@ -179,12 +179,12 @@ const Bieudothongke = (props) => {
 
   return (
     <Card {...props}>
-      <CardHeader title="THỐNG KÊ THIẾT BỊ" />
+      <CardHeader title="THỐNG KÊ THIẾT BỊ" style={{ padding: 6 }} />
       <Divider />
       <CardContent>
         <Box
           style={{
-            height: 250,
+            height: 230,
           }}
           id="canvas-container"
         >

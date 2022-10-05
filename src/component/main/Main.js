@@ -24,6 +24,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../redux/types";
+import { useLocation } from "react-router-dom";
 
 Geocode.setApiKey("AIzaSyDC8AsBAx1cDfV2mNKLiICA0GfnPv9HLDE");
 
@@ -134,8 +135,8 @@ const useStyles = makeStyles((theme) => ({
 
 function a11yProps(index) {
   return {
-    id: `nav-tab-${index}`,
-    "aria-controls": `nav-tabpanel-${index}`,
+    id: `nav-tabmain-${index}`,
+    "aria-controls": `nav-tabmainpanel-${index}`,
   };
 }
 
@@ -184,38 +185,50 @@ const Navbar = [
   },
   {
     index: 3,
+    ten_navbar: "Giám sát sức khỏe thiết bị",
+    url: "/app/sktb",
+    icon: <EqualizerRoundedIcon />,
+  },
+  {
+    index: 4,
     ten_navbar: "Quản lý thiết bị",
     url: "/app/thietbi",
     icon: <EventNoteIcon />,
   },
-  {
-    index: 4,
+  /*{
+    index: 5,
     ten_navbar: "Quản lý ảnh",
     url: "/app/quanlyanh",
     icon: <PhotoAlbumIcon />,
-  },
+  },*/
   {
-    index: 5,
+    index: 6,
     ten_navbar: "Bảo dưỡng",
     url: "/app/bando",
     icon: <BuildIcon />,
   },
   {
-    index: 6,
+    index: 7,
     ten_navbar: "Camera",
     url: "/app/camera",
     icon: <CameraAltRoundedIcon />,
   },
   {
-    index: 7,
+    index: 8,
     ten_navbar: "Hành Lang Tuyến",
     url: "/app/m3d",
     icon: <AddCircleOutlineIcon />,
   },
   {
-    index: 8,
+    index: 9,
     ten_navbar: "Thống kê",
     url: "/app/thongke",
+    icon: <EqualizerRoundedIcon />,
+  },
+  {
+    index: 10,
+    ten_navbar: "Danh sách bất thường",
+    url: "/app/dsbt",
     icon: <EqualizerRoundedIcon />,
   },
   /*{
@@ -224,17 +237,6 @@ const Navbar = [
     url: "/app/phantichdulieu",
     icon: <EqualizerRoundedIcon />,
   },*/
-  {
-    index: 9,
-    ten_navbar: "Danh sách bất thường",
-    url: "/app/dsbt",
-    icon: <EqualizerRoundedIcon />,
-  },
-  {
-    index: 10,
-    ten_navbar: "Test",
-    url: "/app/test",
-  },
 ];
 
 function Main() {
@@ -246,6 +248,15 @@ function Main() {
   const pageSize = useSelector((state) => state.pageSize);
 
   let navigate = useNavigate();
+  let location = useLocation();
+
+  useEffect(() => {
+    var path = window.location.pathname;
+    var item = Navbar.find((x) => x.url === path);
+    if (item) {
+      setValue(item.index);
+    }
+  }, [location]);
 
   const onHideTitle = () => {
     $("#main_title").toggle();

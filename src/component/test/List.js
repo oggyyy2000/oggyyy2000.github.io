@@ -1,4 +1,4 @@
-import { Typography, Card, CardContent } from "@material-ui/core";
+import { Typography, Card, CardContent, CardHeader } from "@material-ui/core";
 
 // icon thiet bi loi
 import errorinsuTT from "./icon/error_insuTT.png";
@@ -15,6 +15,7 @@ import noterrorDZ from "./icon/not_error_DZ.png";
 
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../redux/types";
+import Box from "@material-ui/core/Box";
 
 const MucDoLoi = () => {
   const classes = {};
@@ -28,8 +29,6 @@ const MucDoLoi = () => {
     let obj = {};
     obj.loai = loai;
     obj.ma_thiet_bi = value.ma_thiet_bi;
-    console.log(obj);
-    console.log(value);
     dispatch({
       type: actions.idanh,
       data: obj,
@@ -53,7 +52,7 @@ const MucDoLoi = () => {
       let inneritem = item[Object.keys(item)[0]];
       if (inneritem[classItem[0]])
         return (
-          <>
+          <Box>
             <Typography variant="h5" component="h2">
               {inneritem[classItem[0]] ? classItem[0] : ""}
             </Typography>
@@ -61,8 +60,8 @@ const MucDoLoi = () => {
               style={{
                 display: "flex",
                 overflow: "auto",
-                marginBottom: "2%",
-                marginTop: "2%",
+                marginBottom: "5px",
+                marginTop: "5px",
               }}
             >
               {inneritem[classItem[0]]
@@ -78,7 +77,8 @@ const MucDoLoi = () => {
                           border: "1px solid black",
                           borderRadius: "13px",
                           overflow: "hidden",
-                          minWidth: "7%",
+                          width: "fit-content",
+                          padding: "10px",
                         }}
                       >
                         <img
@@ -89,15 +89,15 @@ const MucDoLoi = () => {
                               ? warninsuSLC
                               : errorinsuSLC
                           }
-                          height={75}
-                          width={40}
+                          height={55}
+                          width={20}
                         />
                       </div>
                     </>
                   ))
                 : ""}
             </div>
-          </>
+          </Box>
         );
     }
   };
@@ -109,16 +109,16 @@ const MucDoLoi = () => {
       let inneritem = item[Object.keys(item)[0]];
       if (inneritem[classItem[1]])
         return (
-          <>
+          <Box>
             <Typography variant="h5" component="h2">
               {inneritem[classItem[1]] ? classItem[1] : ""}
-            </Typography>{" "}
+            </Typography>
             <div
               style={{
                 display: "flex",
                 overflow: "auto",
-                marginBottom: "2%",
-                marginTop: "2%",
+                marginBottom: "5px",
+                marginTop: "5px",
               }}
             >
               {inneritem[classItem[1]]
@@ -134,7 +134,8 @@ const MucDoLoi = () => {
                           border: "1px solid black",
                           borderRadius: "13px",
                           overflow: "hidden",
-                          minWidth: "7%",
+                          width: "fit-content",
+                          padding: "10px",
                         }}
                       >
                         <img
@@ -145,15 +146,15 @@ const MucDoLoi = () => {
                               ? warninsuTT
                               : errorinsuTT
                           }
-                          height={75}
-                          width={40}
+                          height={55}
+                          width={20}
                         />
                       </div>
                     </>
                   ))
                 : ""}
             </div>
-          </>
+          </Box>
         );
     }
   };
@@ -165,7 +166,7 @@ const MucDoLoi = () => {
       let inneritem = item[Object.keys(item)[0]];
       if (inneritem[classItem[2]])
         return (
-          <>
+          <Box>
             <Typography variant="h5" component="h2">
               {inneritem[classItem[2]] ? classItem[2] : ""}
             </Typography>
@@ -173,8 +174,8 @@ const MucDoLoi = () => {
               style={{
                 display: "flex",
                 overflow: "auto",
-                marginBottom: "2%",
-                marginTop: "2%",
+                marginBottom: "5px",
+                marginTop: "5px",
               }}
             >
               {inneritem[classItem[2]]
@@ -190,7 +191,8 @@ const MucDoLoi = () => {
                           border: "1px solid black",
                           borderRadius: "13px",
                           overflow: "hidden",
-                          minWidth: "7%",
+                          width: "fit-content",
+                          padding: "10px",
                         }}
                       >
                         <img
@@ -201,15 +203,15 @@ const MucDoLoi = () => {
                               ? warnDZ
                               : errorDZ
                           }
-                          height={75}
-                          width={40}
+                          height={15}
+                          width={80}
                         />
                       </div>
                     </>
                   ))
                 : ""}
             </div>
-          </>
+          </Box>
         );
     }
   };
@@ -220,7 +222,16 @@ const MucDoLoi = () => {
       variant="outlined"
       style={{ height: "100%" }}
     >
-      <CardContent>
+      <CardHeader title={`Vị Trí: ${idthietbi}`} style={{ padding: 6 }} />
+      <CardContent
+        style={{
+          display: "flex",
+          flexWrap: "nowrap",
+          alignContent: "center",
+          justifyContent: "space-around",
+          alignItems: "flex-start",
+        }}
+      >
         {RenderItem0()}
         {RenderItem1()}
         {RenderItem2()}

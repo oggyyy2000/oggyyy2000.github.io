@@ -62,11 +62,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function DataFetching() {
+function DataFetching(props) {
   const classes = useStyles();
   const [ListTuyen, setListTuyen] = useState([]);
   const [ListThietbi, setListThietBi] = useState({});
-  const [Tuyen, setTuyen] = useState("T87");
+  const { tuyen } = props;
+  //const [Tuyen, setTuyen] = useState(tuyen);
   const dispatch = useDispatch();
   const anhthietbiloi = useSelector((state) => state.anhthietbiloi);
   const idtuyen = useSelector((state) => state.idtuyen);
@@ -78,7 +79,7 @@ function DataFetching() {
   const [gridSize, setGridSize] = useState({ panelone: 12, paneltwo: 0 });
   const urltttbgs = `${
     process.env.REACT_APP_API_URL
-  }getallttgiamsatthietbis?page=${page}${Tuyen ? "&ma_tuyen=" + Tuyen : ""}`;
+  }getallttgiamsatthietbis?page=${page}${tuyen ? "&ma_tuyen=" + tuyen : ""}`;
 
   const handleChangePage = (e, p) => {
     setPage(p);
@@ -88,9 +89,9 @@ function DataFetching() {
     setListThietBi(event.target.value);
   };
 
-  const handleChangeTuyen = (event) => {
+  /*const handleChangeTuyen = (event) => {
     setTuyen(event.target.value);
-  };
+  };*/
 
   useEffect(() => {
     axios
@@ -139,7 +140,7 @@ function DataFetching() {
       .catch((err) => {
         console.log(err);
       });
-  }, [Tuyen, page]);
+  }, [tuyen, page]);
 
   let findbykeyinarray = (array, value) => {
     for (let i = 0; i < array.length; i++) {
