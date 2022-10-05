@@ -74,6 +74,8 @@ function DataFetching() {
   const idthietbi = useSelector((state) => state.idthietbi);
   const [dEtail, setdEtail] = useState({});
   const [page, setPage] = useState(1);
+  const [ListImgNew, setListImgNew] = useState([]);
+  const [NewDate, setNewDate] = useState("");
   const urlt = process.env.REACT_APP_API_URL + "getalltuyens";
   const [gridSize, setGridSize] = useState({ panelone: 12, paneltwo: 0 });
   const urltttbgs = `${
@@ -190,6 +192,19 @@ function DataFetching() {
           (x) => x.ma_thiet_bi === idanh.ma_thiet_bi
         );
         setdEtail(item);
+
+        if (item?.thong_tin_giam_sat_tb) {
+          let arrKey = Object.keys(item?.thong_tin_giam_sat_tb);
+          let newArr = arrKey.pop(0);
+          let newData = [];
+          let items = item?.thong_tin_giam_sat_tb[newArr];
+          setNewDate(newArr);
+          for (let i = 0; i < items.length; i++) {
+            newData.push(items[i]?.image);
+          }
+
+          setListImgNew(newData);
+        }
         if (item) {
           setGridSize({ panelone: 7, paneltwo: 5 });
         } else {
@@ -202,6 +217,24 @@ function DataFetching() {
   useEffect(() => {
     setGridSize({ panelone: 12, paneltwo: 0 });
   }, [page]);
+
+  useEffect(() => {
+    let data = dEtail;
+    if (data) {
+      if (dEtail?.thong_tin_giam_sat_tb) {
+        let arrKey = Object.keys(dEtail?.thong_tin_giam_sat_tb);
+        let newArr = arrKey.pop(0);
+        let newData = [];
+        let items = dEtail?.thong_tin_giam_sat_tb[newArr];
+        setNewDate(newArr);
+        for (let i = 0; i < items.length; i++) {
+          newData.push(items[i]?.image);
+        }
+
+        setListImgNew(newData);
+      }
+    }
+  }, [dEtail]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -373,36 +406,66 @@ function DataFetching() {
                       <Card variant="outlined" style={{ height: "100%" }}>
                         <CardContent>
                           <>
-                            <CardHeader
-                              title={`Ảnh thiết bị gốc ${
+                            <Box>
+                              <p>{`Ảnh thiết bị gốc ${
                                 dEtail ? dEtail?.loai_thiet_bi || "" : ""
-                              }`}
-                            />
-                            <div
-                              style={{
-                                display: "flex",
-                                overflow: "auto",
-                                marginBottom: "2%",
-                                marginTop: "2%",
-                                minHeight: "60%",
-                                minWidth: "60%",
-                              }}
-                            >
-                              {dEtail &&
-                                dEtail?.thong_tin_giam_sat_tb
-                                  ?.img_root_path && (
-                                  <SlideshowGallery
-                                    input={
-                                      dEtail?.thong_tin_giam_sat_tb
-                                        ?.img_root_path
-                                    }
-                                    ratio={`16:9`}
-                                  />
-                                )}
-                            </div>
-                            <CardHeader title={"Ảnh thiết bị mới nhất"} />
+                              }`}</p>
 
-                            {dEtail &&
+                              <div
+                                style={{
+                                  display: "flex",
+                                  //overflow: "auto",
+                                  marginBottom: "2%",
+                                  marginTop: "2%",
+                                  minHeight: "60%",
+                                  minWidth: "60%",
+                                }}
+                              >
+                                {dEtail &&
+                                  dEtail?.thong_tin_giam_sat_tb &&
+                                  dEtail?.thong_tin_giam_sat_tb
+                                    ?.img_root_path && (
+                                    <SlideshowGallery
+                                      input={
+                                        dEtail?.thong_tin_giam_sat_tb
+                                          ?.img_root_path
+                                      }
+                                      ratio={
+                                        dEtail?.loai_thiet_bi !== "day_dien"
+                                          ? `9:16`
+                                          : "16:9"
+                                      }
+                                      type={dEtail?.loai_thiet_bi}
+                                    />
+                                  )}
+                              </div>
+                            </Box>
+                            {dEtail?.loai_thiet_bi === "day_dien" && (
+                              <>
+                                <br />
+                                <br />
+                              </>
+                            )}
+                            <br />
+                            <Box>
+                              <p>{`Ảnh thiết bị kiểm ngày ${NewDate}`}</p>
+                              {dEtail && ListImgNew && (
+                                <>
+                                  <p>{}</p>
+                                  <SlideshowGallery
+                                    input={ListImgNew}
+                                    ratio={
+                                      dEtail?.loai_thiet_bi !== "day_dien"
+                                        ? `9:16`
+                                        : "16:9"
+                                    }
+                                    type={dEtail?.loai_thiet_bi}
+                                  />
+                                </>
+                              )}
+                            </Box>
+                            {/*dEtail &&
+                              dEtail?.thong_tin_giam_sat_tb &&
                               dEtail?.thong_tin_giam_sat_tb &&
                               Object.keys(dEtail?.thong_tin_giam_sat_tb).map(
                                 (item, index) => (
@@ -428,7 +491,7 @@ function DataFetching() {
                                     )}
                                   </>
                                 )
-                              )}
+                                              )*/}
                           </>
                         </CardContent>
                       </Card>
