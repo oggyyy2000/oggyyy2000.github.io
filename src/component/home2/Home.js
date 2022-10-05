@@ -200,7 +200,7 @@ export default function Home() {
                 <ResizeVertical height={sizeResize.height2} id="map">
                   <button
                     className="btnRedict"
-                    onDoubleClick={() => navigate("/app/test")}
+                    onDoubleClick={() => navigate("/app/sktb")}
                   >
                     <DataFetching tuyen={Tuyen} />
                   </button>
