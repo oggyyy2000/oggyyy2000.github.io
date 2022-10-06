@@ -271,11 +271,9 @@ export default function DialogImageShow2(props) {
                     ].name}
                 </b>
                 <br />
-                <b>Tên thiết bị:</b> *
                 <br />
                 <b>Vị trí:</b> {SlideImgShow && SlideImgShow.info}
                 <br />
-                <b>Bất thường phát hiện được:</b> Không
                 <br />
               </Box>
             )}

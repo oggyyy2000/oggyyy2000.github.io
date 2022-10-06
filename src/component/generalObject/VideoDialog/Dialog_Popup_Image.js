@@ -16,6 +16,7 @@ import DialogImageShow from "../slideshow-gallery/DialogImageShow";
 import Loading from "../Loading";
 import { ChangerUrl } from "../../../util/ChangeUrl";
 // data
+/*
 import { T1 } from "../../../util/toado/T1";
 import { T2 } from "../../../util/toado/T2";
 import { T3 } from "../../../util/toado/T3";
@@ -23,7 +24,7 @@ import { T4 } from "../../../util/toado/T4";
 import { T5 } from "../../../util/toado/T5";
 import { T6 } from "../../../util/toado/T6";
 import { T7 } from "../../../util/toado/T7";
-import { T8 } from "../../../util/toado/T8";
+import { T8 } from "../../../util/toado/T8";*/
 ///////////////////////////////////////////
 
 const useStyles = makeStyles((theme) => ({
@@ -108,35 +109,16 @@ export default function DialogPopupImage(props) {
 
   const Change_List_Cot = (value) => {
     Resset_Cot();
-    switch (value) {
-      case "T1":
-        setListCot(T1);
-        break;
-      case "T2":
-        setListCot(T2);
-        break;
-      case "T3":
-        setListCot(T3);
-        break;
-      case "T4":
-        setListCot(T4);
-        break;
-      case "T5":
-        setListCot(T5);
-        break;
-      case "T6":
-        setListCot(T6);
-        break;
-      case "T7":
-        setListCot(T7);
-        break;
-      case "T8":
-        setListCot(T8);
-        break;
-      default:
-        setListCot(T1);
-        break;
-    }
+    axios({
+      url: `${process.env.REACT_APP_API_URL}getallvitribytuyens?ma_tuyen=${value}`,
+      method: "get",
+      timeout: 8000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      setListCot(res?.data);
+    });
   };
 
   useEffect(() => {
@@ -159,21 +141,21 @@ export default function DialogPopupImage(props) {
         try {
           var pluginArrayArg = new Array();
           let BatDau = ListCot
-            ? ListCot.find((o) => o.cot === post.bat_dau_doan)
+            ? ListCot.find((o) => o.ma_vi_tri === post.bat_dau_doan)
             : null;
           let KetThuc = ListCot
-            ? ListCot.find((o) => o.cot === post.ket_thuc_doan)
+            ? ListCot.find((o) => o.ma_vi_tri === post.ket_thuc_doan)
             : null;
           if (BatDau !== null) {
             var jsonArg1 = new Object();
-            jsonArg1.cot = BatDau.cot;
-            jsonArg1.toa_do_vi_tri = BatDau.x + "," + BatDau.y;
+            jsonArg1.ma_vi_tri = BatDau.ma_vi_tri;
+            jsonArg1.toa_do = BatDau.toa_do;
             pluginArrayArg.push(jsonArg1);
           }
           if (KetThuc !== null) {
             var jsonArg2 = new Object();
-            jsonArg2.cot = KetThuc.cot;
-            jsonArg2.toa_do_vi_tri = KetThuc.x + "," + KetThuc.y;
+            jsonArg2.ma_vi_tri = KetThuc.ma_vi_tri;
+            jsonArg2.toa_do = KetThuc.toa_do;
             pluginArrayArg.push(jsonArg2);
           }
           var jsonArray = JSON.parse(JSON.stringify(pluginArrayArg));

@@ -134,7 +134,7 @@ const VideoWS = () => {
     for (let i = start; i < Lists.length; i++) {
       setMainIMG(Lists[i].value);
 
-      await sleep(1000 / 3);
+      await sleep(1000 / 4);
     }
   }
 

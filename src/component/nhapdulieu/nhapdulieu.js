@@ -87,7 +87,7 @@ export default function DotBay() {
   const fetchedData = useSelector((state) => state.dbtc);
   const ListTuyen = useSelector((state) => state.listtuyen);
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
-    Tuyen ? "&ma_tuyen=" + Tuyen : "&none=0"
+    Tuyen ? "&ma_tuyen=" + Tuyen : ""
   }`;
   const [ListVTT, setListVTT] = useState([]);
   let count = 0;
@@ -289,8 +289,8 @@ export default function DotBay() {
     });
   };
 
-  const GetListVideo = (id) => {
-    async function getDataListImg(id) {
+  const GetListVideo = (id, data) => {
+    async function getDataListImg(id, data) {
       let urlg = urllistvideo + "/" + id;
       try {
         let res = await axios({
@@ -309,9 +309,8 @@ export default function DotBay() {
       }
     }
 
-    getDataListImg(id).then((res) => {
+    getDataListImg(id, data).then((res) => {
       if (res) {
-        //console.log(res);
         if (Object.keys(res).length !== 0) {
           dispatch({
             type: actions.CURRENT_VIDEO,
@@ -331,6 +330,51 @@ export default function DotBay() {
           });
         }
       }
+
+      let BatDau = data?.bat_dau_doan;
+      let KetThuc = data?.ket_thuc_doan;
+      axios({
+        url: `${process.env.REACT_APP_API_URL}getallvitribytuyens?ma_tuyen=${data?.ma_tuyen}`,
+        method: "get",
+        timeout: 8000,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        let ListCot = res?.data;
+        try {
+          var pluginArrayArg = new Array();
+          let BatDauz = ListCot
+            ? ListCot.find((o) => o.ma_vi_tri === BatDau)
+            : null;
+          let KetThucz = ListCot
+            ? ListCot.find((o) => o.ma_vi_tri === KetThuc)
+            : null;
+          if (BatDauz !== null) {
+            var jsonArg1 = new Object();
+            jsonArg1.ma_vi_tri = BatDauz.ma_vi_tri;
+            jsonArg1.toa_do = BatDauz.toa_do;
+            pluginArrayArg.push(jsonArg1);
+          }
+          if (KetThucz !== null) {
+            var jsonArg2 = new Object();
+            jsonArg2.ma_vi_tri = KetThucz.ma_vi_tri;
+            jsonArg2.toa_do = KetThucz.toa_do;
+            pluginArrayArg.push(jsonArg2);
+          }
+          var jsonArray = JSON.parse(JSON.stringify(pluginArrayArg));
+          dispatch({
+            type: actions.ON_CURRENT_TUYEN_CHANGE,
+            data: data.ma_tuyen,
+          });
+          dispatch({
+            type: actions.ON_CURRENT_LIST_COT_CHANGE,
+            data: jsonArray,
+          });
+        } catch (e) {
+          //console.log(e);
+        }
+      });
     });
   };
 
@@ -342,7 +386,7 @@ export default function DotBay() {
       fetchedData &&
       fetchedData.length !== 0
     ) {
-      GetListVideo(fetchedData[0].ma_dot_kiem_tra);
+      GetListVideo(fetchedData[0].ma_dot_kiem_tra, fetchedData[0]);
     }
     return () => {
       componentMounted = false;
@@ -352,7 +396,7 @@ export default function DotBay() {
   useEffect(() => {
     let componentMounted = true;
     if (componentMounted && fetchedData && fetchedData.length !== 0) {
-      GetListVideo(fetchedData[0].ma_dot_kiem_tra);
+      GetListVideo(fetchedData[0].ma_dot_kiem_tra, fetchedData[0]);
     }
     return () => {
       componentMounted = false;
@@ -409,35 +453,6 @@ export default function DotBay() {
   const onChangeSelectTuyen = (event) => {
     onChange(event, setTuyen);
     Resset_Cot();
-    /*switch (event.target.value) {
-      case "T1":
-        setListCot(T1);
-        break;
-      case "T2":
-        setListCot(T2);
-        break;
-      case "T3":
-        setListCot(T3);
-        break;
-      case "T4":
-        setListCot(T4);
-        break;
-      case "T5":
-        setListCot(T5);
-        break;
-      case "T6":
-        setListCot(T6);
-        break;
-      case "T7":
-        setListCot(T7);
-        break;
-      case "T8":
-        setListCot(T8);
-        break;
-      default:
-        setListCot(T1);
-        break;
-    }*/
   };
 
   const onChangeSelectBatDau = (event) => {

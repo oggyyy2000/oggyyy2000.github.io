@@ -5,6 +5,7 @@ import WarningIcon from "@material-ui/icons/Warning";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Button } from "@material-ui/core";
 import * as actions from "../../redux/types";
+import Loading from "./Loading";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -115,8 +116,7 @@ export default function Log() {
             paddingTop: 5,
           }}
         >
-          {Toado &&
-            Toado.length !== 0 &&
+          {Toado && Toado.length !== 0 ? (
             Toado.map((item, index) => {
               return (
                 <li
@@ -148,7 +148,10 @@ export default function Log() {
                     })}
                 </li>
               );
-            })}
+            })
+          ) : (
+            <Loading />
+          )}
           <li ref={messagesEndRef} />
         </ul>
       ) : (

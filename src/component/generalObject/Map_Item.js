@@ -60,7 +60,7 @@ const Map_Item = () => {
   const Redux_cot = useSelector((state) => state.cot);
   const Redux_tuyen = useSelector((state) => state.tuyen);
   const urlvt = `${process.env.REACT_APP_API_URL}getallvitribytuyens?${
-    Redux_tuyen ? "&ma_tuyen=" + Redux_tuyen : "&none=0"
+    Redux_tuyen ? "&ma_tuyen=" + Redux_tuyen : ""
   }`;
   const [ListVTT, setListVTT] = useState([]);
   const ModeShowVideo = useSelector((state) => state.modeshowvideo);
@@ -175,12 +175,12 @@ const Map_Item = () => {
   var index2 = 0;
 
   const findobj = (str) => {
-    var pluginArrayArg = new Array();
     /// tìm vị trí cột trong array
     if (Redux_cot) {
       if (Redux_cot.length === 2) {
-        const Item0 = Redux_cot[0]["toa_do_vi_tri"];
-        const Item1 = Redux_cot[1]["toa_do_vi_tri"];
+        var pluginArrayArg = new Array();
+        const Item0 = Redux_cot[0]["toa_do"];
+        const Item1 = Redux_cot[1]["toa_do"];
         // tìm vị trí ( thử tự cột )
         index1 = str.findIndex((item) => item.toa_do == Item0);
         index2 = str.findIndex((item) => item.toa_do == Item1);
@@ -204,7 +204,8 @@ const Map_Item = () => {
         });
         SetLinePoint(filtered);
       } else if (Redux_cot.length === 1) {
-        const Item = Redux_cot[0]["toa_do_vi_tri"];
+        var pluginArrayArg = new Array();
+        const Item = Redux_cot[0]["toa_do"];
         if (Item !== "") {
           const lat = parseFloat(Item.split(",")[0]),
             lng = parseFloat(Item.split(",")[1]);
@@ -249,28 +250,30 @@ const Map_Item = () => {
   const calc_center_and_draw = (Point) => {
     if (Point) {
       // draw polyline
-      if (ModeShowVideo !== "Live" || Typewsdata === "IMG") {
-        for (var i = 0; i < Point.length; i++) {
-          if (!isNaN(parseFloat(Point[i].x))) {
-            pathCoordinates.push({
-              lat: parseFloat(Point[i].x),
-              lng: parseFloat(Point[i].y),
-            });
-          }
+      //if (ModeShowVideo !== "Live" || Typewsdata === "IMG") {
+      //console.log(Point);
+      for (var i = 0; i < Point.length; i++) {
+        if (!isNaN(parseFloat(Point[i].x))) {
+          pathCoordinates.push({
+            lat: parseFloat(Point[i].x),
+            lng: parseFloat(Point[i].y),
+          });
         }
-        SetPathPoint(pathCoordinates);
       }
+      SetPathPoint(pathCoordinates);
+      //}
       calc_center(Point);
     }
     ///////////////////////
   };
 
   useEffect(() => {
-    if (ModeShowVideo === "LIVE" && Typewsdata !== "IMG") SetLinePoint([]);
+    //if (ModeShowVideo === "LIVE" && Typewsdata !== "IMG") SetLinePoint([]);
     SetshowInfoIndex(-1);
     if (Toado) {
       setTD(Toado);
       var end = Toado.length - 1;
+      //var end = 1;
       if (Toado[parseInt(end)]) {
         setCenter({
           lat: parseFloat(Toado[parseInt(end)].latitude),
@@ -282,7 +285,9 @@ const Map_Item = () => {
   }, [Toado]);
 
   useEffect(() => {
-    findobj(ListVTT);
+    if (ListVTT) {
+      findobj(ListVTT);
+    }
   }, [Redux_cot]);
 
   // Function - Onclick
@@ -303,6 +308,7 @@ const Map_Item = () => {
     setCenter({ lat: lat, lng: lng });
     setZoomsize(25);
   };
+
   let pathCoordinates = [];
 
   const rendermap1 = () => {
@@ -317,6 +323,13 @@ const Map_Item = () => {
                 null /* anchor is bottom center of the scaled image */,
                 new window.google.maps.Size(10, 10)
               );
+              let iconMarker2 = new window.google.maps.MarkerImage(
+                `${process.env.REACT_APP_URL}icon/vector.png`,
+                null /* size is determined at runtime */,
+                null /* origin is 0,0 */,
+                null /* anchor is bottom center of the scaled image */,
+                new window.google.maps.Size(40, 40)
+              );
               const cot = item["cot"],
                 lat = parseFloat(item["x"]),
                 lng = parseFloat(item["y"]);
@@ -327,7 +340,7 @@ const Map_Item = () => {
                     icon={
                       index !== 0 && index !== LinePoint.length - 1
                         ? iconMarker
-                        : null
+                        : iconMarker2
                     }
                     draggable={true}
                     onDragEnd={onMarkerDragEnd}
@@ -390,58 +403,58 @@ const Map_Item = () => {
             fullscreenControl: false,
           }}
         >
-          {ModeShowVideo !== "Live" ? rendermap1() : ""}
-          {TD
-            ? TD.map((item, index) => {
-                const cot = "",
-                  lat = parseFloat(item.latitude),
-                  lng = parseFloat(item.longtitude);
-                return (
-                  <Marker
-                    key={index}
-                    icon={iconMarker}
-                    draggable={true}
-                    onDragEnd={onMarkerDragEnd}
-                    position={{ lat: lat, lng: lng }}
-                    onClick={() => {
-                      showInfo(index, item);
-                      /* zoom2(cot, lat, lng)*/
-                    }}
-                    animation={1}
-                  >
-                    {showInfoIndex === index && (
-                      <InfoWindow onCloseClick={() => SetshowInfoIndex(-1)}>
-                        <Box
-                          style={{
-                            color: "black",
-                            width: 100,
-                            wordWrap: "break-word",
-                          }}
-                        >
-                          {/*<b>Cột: {cot}</b>*/}
-                          <p>
-                            Tọa độ: {lat} , {lng}
-                          </p>
-                          Bất thường:
-                          <br />
-                          {item.error.map((value, idx) => {
-                            return item.error.length < idx ? (
-                              <b key={idx} style={{ color: "red" }}>
-                                {value.error_label},{" "}
-                              </b>
-                            ) : (
-                              <b key={idx} style={{ color: "red" }}>
-                                {value.error_label}{" "}
-                              </b>
-                            );
-                          })}
-                        </Box>
-                      </InfoWindow>
-                    )}
-                  </Marker>
-                );
-              })
-            : ""}
+          {ModeShowVideo !== "Live"
+            ? rendermap1()
+            : TD.length === 0 && rendermap1()}
+          {ModeShowVideo === "Live" &&
+            TD.length > 0 &&
+            TD.map((item, index) => {
+              const cot = "",
+                lat = parseFloat(item.latitude),
+                lng = parseFloat(item.longtitude);
+              return (
+                <Marker
+                  key={index}
+                  icon={iconMarker}
+                  draggable={true}
+                  onDragEnd={onMarkerDragEnd}
+                  position={{ lat: lat, lng: lng }}
+                  onClick={() => {
+                    showInfo(index, item);
+                  }}
+                  animation={1}
+                >
+                  {showInfoIndex === index && (
+                    <InfoWindow onCloseClick={() => SetshowInfoIndex(-1)}>
+                      <Box
+                        style={{
+                          color: "black",
+                          width: 100,
+                          wordWrap: "break-word",
+                        }}
+                      >
+                        <p>
+                          Tọa độ: {lat} , {lng}
+                        </p>
+                        Bất thường:
+                        <br />
+                        {item.error.map((value, idx) => {
+                          return item.error.length < idx ? (
+                            <b key={idx} style={{ color: "red" }}>
+                              {value.error_label},{" "}
+                            </b>
+                          ) : (
+                            <b key={idx} style={{ color: "red" }}>
+                              {value.error_label}{" "}
+                            </b>
+                          );
+                        })}
+                      </Box>
+                    </InfoWindow>
+                  )}
+                </Marker>
+              );
+            })}
         </GoogleMap>
       );
     })

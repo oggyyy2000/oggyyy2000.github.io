@@ -363,13 +363,13 @@ export default function DialogSavePopup(props) {
     if (BatDau !== null) {
       var jsonArg1 = new Object();
       jsonArg1.cot = BatDau.split("|")[0];
-      jsonArg1.toa_do_vi_tri = BatDau.split("|")[1];
+      jsonArg1.toa_do = BatDau.split("|")[1];
       pluginArrayArg.push(jsonArg1);
     }
     if (KetThuc !== null) {
       var jsonArg2 = new Object();
       jsonArg2.cot = KetThuc.split("|")[0];
-      jsonArg2.toa_do_vi_tri = KetThuc.split("|")[1];
+      jsonArg2.toa_do = KetThuc.split("|")[1];
       pluginArrayArg.push(jsonArg2);
     }
     var jsonArray = JSON.parse(JSON.stringify(pluginArrayArg));
@@ -661,11 +661,11 @@ export default function DialogSavePopup(props) {
                   <MenuItem
                     key={index}
                     value={item.ma_vi_tri + "|" + item.toa_do}
-                    disabled={
+                    /*disabled={
                       item.ma_vi_tri + "|" + item.toa_do === KetThuc
                         ? true
                         : false
-                    }
+                    }*/
                   >
                     {item.ten_vi_tri}
                   </MenuItem>
@@ -703,11 +703,11 @@ export default function DialogSavePopup(props) {
                   <MenuItem
                     key={index}
                     value={item.ma_vi_tri + "|" + item.toa_do}
-                    disabled={
+                    /*disabled={
                       item.ma_vi_tri + "|" + item.toa_do === BatDau
                         ? true
                         : false
-                    }
+                    }*/
                   >
                     {item.ten_vi_tri}
                   </MenuItem>

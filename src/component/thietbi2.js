@@ -124,6 +124,7 @@ const ThietBi2 = () => {
   const [DataDetail, setDataDetail] = useState({});
   const [ExpandState, setExpandState] = useState(true);
   const [DetailState, setDetailState] = useState(false);
+  const [IndexShow, setIndexShow] = useState(-1);
   const urltb = `${
     process.env.REACT_APP_API_URL
   }getallthietbituyens?page=${page}${Tuyen ? "&ma_tuyen=" + Tuyen : ""}${
@@ -198,8 +199,10 @@ const ThietBi2 = () => {
     if (VTT && ListVTT) {
       let obj = ListVTT.find((x) => x.ma_vi_tri === VTT);
       setListSVTT([obj]);
+      //setIndexShow(0);
     } else {
       setListSVTT(ListVTT);
+      //setIndexShow(-1);
     }
   }, [VTT]);
 
@@ -258,6 +261,7 @@ const ThietBi2 = () => {
       } else {
         setListSVTT(res);
       }
+      setIndexShow(-1);
     });
   }, []);
 
@@ -290,9 +294,12 @@ const ThietBi2 = () => {
       } else {
         setListSVTT(res);
       }
-      if (res?.length != 0 && res[0]?.toa_do) {
-        let ToaDo = res[0]?.toa_do?.split(",");
-        setCenter({ lat: ToaDo[0], lng: ToaDo[1] });
+      setIndexShow(-1);
+      if (res?.length != 0) {
+        if (res[0]?.toa_do) {
+          let ToaDo = res[0]?.toa_do?.split(",");
+          setCenter({ lat: ToaDo[0], lng: ToaDo[1] });
+        }
       }
     });
   }, [Tuyen, VTT]);
@@ -468,11 +475,12 @@ const ThietBi2 = () => {
                     //onDragEnd={onMarkerDragEnd}
                     position={{ lat: lat, lng: lng }}
                     onClick={() => {
-                      console.log(item);
+                      setIndexShow(index);
+                      //console.log(item);
                       //SetshowInfoIndex(index);
                     }}
                   >
-                    {ListSVTT && ListSVTT.length === 1 && (
+                    {ListSVTT && ListSVTT.length === 1 ? (
                       <InfoWindow>
                         <Box style={{ color: "black", width: 140 }}>
                           <b>Cột: {item?.ten_vi_tri}</b>
@@ -481,6 +489,17 @@ const ThietBi2 = () => {
                           </p>
                         </Box>
                       </InfoWindow>
+                    ) : (
+                      index === IndexShow && (
+                        <InfoWindow onCloseClick={() => setIndexShow(-1)}>
+                          <Box style={{ color: "black", width: 140 }}>
+                            <b>Cột: {item?.ten_vi_tri}</b>
+                            <p>
+                              Tọa độ: {lat} , {lng}
+                            </p>
+                          </Box>
+                        </InfoWindow>
+                      )
                     )}
                   </Marker>
                 );
